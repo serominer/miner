@@ -1,0 +1,221 @@
+p {
+  margin-bottom: 0px;
+}
+.miner {
+  background-color: #120c7b;
+  padding-bottom: 20px;
+}
+.miner .content {
+  margin: 0 15px;
+}
+.miner .content .logobox img {
+  margin-top: 15px;
+  height: 60px;
+}
+.miner .content .headerbox {
+  margin: 15px 0;
+  text-align: center;
+}
+.miner .content .headerbox img {
+  height: 120px;
+}
+.miner .content .userbox {
+  background-color: rgba(0, 18, 89, 0.8);
+  border-radius: 15px;
+}
+.miner .content .userbox .usercontent {
+  padding: 10px;
+  display: flex;
+}
+.miner .content .userbox .usercontent .users {
+  flex: 1;
+  border-right: 2px solid #ffffff;
+  margin-right: 15px;
+}
+.miner .content .userbox .usercontent .users .img img {
+  height: 60px;
+}
+.miner .content .userbox .usercontent .users div {
+  text-align: center;
+}
+.miner .content .userbox .usercontent .users div p {
+  color: #ffffff;
+}
+.miner .content .userbox .usercontent .userinfo {
+  flex: 2;
+}
+.miner .content .userbox .usercontent .userinfo .username p {
+  color: #ffffff;
+}
+.miner .content .userbox .usercontent .userinfo .usermoney {
+  margin-top: 20px;
+}
+.miner .content .userbox .usercontent .userinfo .usermoney p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.miner .content .userbox .usercontent .userbtn {
+  flex: 1;
+  line-height: 40px;
+  text-align: center;
+}
+.miner .content .userbox .usercontent .userbtn .ant-btn {
+  background-color: #0c9e84;
+}
+.miner .content .userbox .usercontent .userbtn .ant-btn:active {
+  color: black;
+}
+.miner .content .listbox {
+  border-radius: 15px;
+  margin: 30px 0;
+}
+.miner .content .listbox .listcontent .top {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background-color: #0c9e84;
+  display: flex;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+.miner .content .listbox .listcontent .top .left {
+  flex: 3;
+  display: flex;
+}
+.miner .content .listbox .listcontent .top .left .level p {
+  color: #ffffff;
+  line-height: 40px;
+}
+.miner .content .listbox .listcontent .top .left .levelimg img {
+  height: 20px;
+  line-height: 40px;
+  padding: 0px 5px;
+}
+.miner .content .listbox .listcontent .top .left .leveltitle p {
+  color: #ff9600;
+  line-height: 40px;
+}
+.miner .content .listbox .listcontent .top .right {
+  flex: 4;
+  display: flex;
+}
+.miner .content .listbox .listcontent .top .right .left {
+  flex: 2;
+  flex-wrap: wrap;
+}
+.miner .content .listbox .listcontent .top .right .left div {
+  width: 100%;
+}
+.miner .content .listbox .listcontent .top .right .left div p {
+  color: #ffffff;
+}
+.miner .content .listbox .listcontent .top .right .right {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0px 10px 5px;
+}
+.miner .content .listbox .listcontent .top .right .right .ant-btn {
+  background-color: #ff9600;
+  color: #ffffff;
+}
+.miner .content .listbox .listcontent .top .right .right .ant-btn:active {
+  color: #ffffff;
+}
+.miner .content .listbox .listcontent .bottom {
+  background-color: rgba(0, 18, 89, 0.8);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.miner .content .listbox .listcontent .bottom .rowbox {
+  color: #ffffff;
+  display: flex;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .leftbox {
+  flex: 3;
+  display: flex;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .leftbox .left {
+  flex: 2;
+  margin-bottom: 10px;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .leftbox .right {
+  flex: 1;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .rightbox {
+  flex: 2;
+  display: flex;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .rightbox .left {
+  flex: 2;
+  text-align: right;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .rightbox .right {
+  flex: 1;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .rightbox .right .ant-btn {
+  background-color: #0c9e84;
+}
+.miner .content .listbox .listcontent .bottom .rowbox .rightbox .right .ant-btn:active {
+  color: black;
+}
+.miner .content .contractbox {
+  background-color: rgba(0, 18, 89, 0.8);
+  border-radius: 15px;
+}
+.miner .content .contractbox .contractcontent {
+  padding: 10px 10px 0px 10px;
+}
+.miner .content .contractbox .contractcontent p {
+  padding-bottom: 10px;
+  color: #ffffff;
+}
+.miner .content .myinformation {
+  background-color: rgba(0, 18, 89, 0.8);
+  border-radius: 15px;
+  margin: 30px 0;
+}
+.miner .content .myinformation .myinformationcontent {
+  padding: 10px;
+}
+.miner .content .myinformation .myinformationcontent .head {
+  display: flex;
+  border-bottom: 1px solid #9fa0ad;
+}
+.miner .content .myinformation .myinformationcontent .head img {
+  flex: 0 0 22px;
+  height: 25px;
+}
+.miner .content .myinformation .myinformationcontent .head div {
+  flex: 1;
+}
+.miner .content .myinformation .myinformationcontent .head div p {
+  position: relative;
+  bottom: -5px;
+  margin-left: 10px;
+}
+.miner .content .myinformation .myinformationcontent div {
+  margin-bottom: 10px;
+}
+.miner .content .myinformation .myinformationcontent div p {
+  color: #ffffff;
+}
+.ant-btn {
+  height: 20px !important;
+  line-height: 9px !important;
+}
+.withdrawbox {
+  width: 80% !important;
+  border-radius: 15px;
+}
+.withdrawbox .ant-modal-title {
+  font-weight: bold;
+  text-align: center;
+}
+.withdrawbox .ant-modal-header {
+  border-bottom: none !important;
+}
