@@ -51,7 +51,7 @@ p {
   margin-top: 20px;
 }
 .miner .content .userbox .usercontent .userinfo .usermoney p {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   color: #ffffff;
 }
@@ -218,4 +218,50 @@ p {
 }
 .withdrawbox .ant-modal-header {
   border-bottom: none !important;
+}
+.upgradebox {
+  width: 80% !important;
+  border-radius: 10px;
+}
+.upgradebox .ant-modal-content {
+  background-color: black !important;
+  border-radius: 15px;
+}
+.upgradebox .ant-modal-close-x {
+  color: #ffffff;
+}
+.upgradebox .upgradeboxcontent .head .img {
+  text-align: center;
+}
+.upgradebox .upgradeboxcontent .head .img img {
+  height: 40px;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem {
+  display: flex;
+  border: 1px solid #9fa0ad;
+  padding: 8px 5px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  color: #ffffff;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem .detailinfo {
+  flex: 3;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem .detailinfo p {
+  color: #ffffff;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem .levelinfo {
+  flex: 2;
+  display: flex;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem .levelinfo img {
+  width: 21px;
+  margin-right: 10px;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem .levelinfo p {
+  color: #ff9600;
+}
+.upgradebox .upgradeboxcontent .footer img {
+  text-align: center;
+  width: 100%;
 }
