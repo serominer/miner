@@ -4,8 +4,7 @@ import { InputNumber, message, Spin, Alert, Button, Modal, Input, Select, List }
 import service from '../../api/service';
 import contract from '../../api/contract';
 import BigNumber from 'bignumber.js'
-import { LoadingOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
-
+import { LoadingOutlined, CloseCircleOutlined, CheckCircleOutlined, CopyOutlined } from '@ant-design/icons';
 
 import logo from '../../images/logo.png';
 import head from '../../images/head.png';
@@ -27,6 +26,7 @@ const { Option } = Select;
 const errIcon = <CloseCircleOutlined style={{ fontSize: 24 }} />
 const successIcon = <CheckCircleOutlined style={{ fontSize: 24 }} />
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+const copyIcon = <CopyOutlined style={{ fontSize: 24 }} />
 interface Miners {
   data: Array<any>,
   withdrawvisible: boolean,
@@ -48,6 +48,7 @@ interface Miners {
   returnnowday: number,
   communityProfid: number,
   nodeProfid: number,
+  recommendProfit: number,
   level: number,
   levelnum: number,
   lastreturntime: string,
@@ -58,7 +59,6 @@ interface Miners {
   sendTxt: string,
   sendTxtnumber: number,
   levelborder: any,
-  recommendProfit: number
 }
 
 class Miner extends React.Component<any, Miners> {
@@ -83,10 +83,11 @@ class Miner extends React.Component<any, Miners> {
     returnnowday: 0,
     communityProfid: 0,
     nodeProfid: 0,
+    recommendProfit: 0,
     level: 0,
     levelnum: 0,
     lastreturntime: "",
-    referralcode: "hAYBo5yIHmP",
+    referralcode: "",
     withdrawcy: "SUSD_T",
     loading: {
       loadingbox: "loadingbox",
@@ -117,7 +118,6 @@ class Miner extends React.Component<any, Miners> {
         name: "listitem"
       }
     ],
-    recommendProfit:0
   }
 
   componentDidMount() {
@@ -172,7 +172,9 @@ class Miner extends React.Component<any, Miners> {
         returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
         amount: parseFloat(fromValue(res[2].amount, 18).toNumber().toFixed(2)),
         lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m'),
-        recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2))
+        recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2)),
+        nodeProfid: parseFloat(fromValue(res[2].nodeProfid, 18).toNumber().toFixed(2)),
+        communityProfid: parseFloat(fromValue(res[2].communityProfid, 18).toNumber().toFixed(2))
       })
     })
   }
@@ -335,7 +337,7 @@ class Miner extends React.Component<any, Miners> {
       sendTxt: "",
       sendnum: e,
     })
-    contract.investCall(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
+    contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
       if (res !== "") {
         let num = parseFloat(fromValue(res, 18).toNumber().toFixed(2));
         that.setState({
@@ -356,41 +358,45 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-    console.log()
-    if (that.state.level !== 0) {
-      if (that.state.sendnum === 0) {
-        message.warning('请输入你要升级的金额')
-      } else {
-        that.setState({
-          upgradevisible: false
-        })
-        contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-          that.loading("loading", true, "", "")
-          service.getTransactionReceipt(hash).then((res) => {
-            that.loading("loading", false, "SUCCESSFULLY", successIcon)
-            setTimeout(function () {
-              that.gatdata();
-            }, 1500);
+    console.log(that.state.referralcode.length)
+    if (that.state.referralcode.length !== 0) {
+      if (that.state.level !== 0) {
+        if (that.state.sendnum === 0) {
+          message.warning('请输入你要升级的金额')
+        } else {
+          that.setState({
+            upgradevisible: false
           })
-        })
+          contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+            that.loading("loading", true, "", "")
+            service.getTransactionReceipt(hash).then((res) => {
+              that.loading("loading", false, "SUCCESSFULLY", successIcon)
+              setTimeout(function () {
+                that.gatdata();
+              }, 1500);
+            })
+          })
+        }
+      } else {
+        if (that.state.sendTxtnumber >= 300) {
+          that.setState({
+            upgradevisible: false
+          })
+          contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+            that.loading("loading", true, "", "")
+            service.getTransactionReceipt(hash).then((res) => {
+              that.loading("loading", false, "SUCCESSFULLY", successIcon)
+              setTimeout(function () {
+                that.gatdata();
+              }, 1500);
+            })
+          })
+        } else {
+          message.error('首次创建需要输入大于等于300的SUSD');
+        }
       }
     } else {
-      if (that.state.sendTxtnumber >= 300) {
-        that.setState({
-          upgradevisible: false
-        })
-        contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-          that.loading("loading", true, "", "")
-          service.getTransactionReceipt(hash).then((res) => {
-            that.loading("loading", false, "SUCCESSFULLY", successIcon)
-            setTimeout(function () {
-              that.gatdata();
-            }, 1500);
-          })
-        })
-      } else {
-        message.error('首次创建需要输入大于等于300的SUSD');
-      }
+      message.error('请填写推荐码');
     }
   }
 
@@ -522,19 +528,6 @@ class Miner extends React.Component<any, Miners> {
                       </List.Item>
                     )}
                   />
-
-                  {/* <ul className="usercontent">
-
-                    {
-                      this.state.data.map((item: any, index: number) => {
-                        return (
-                          <li data-name={item.Name} data-mainpkr={item.MainPKr} onClick={(e) => this.selectName(e)} key={index}>
-                            {item.Name}&nbsp;&nbsp;&nbsp;  {item.MainPKr.substring(0, 5)}...{item.MainPKr.substring(item.MainPKr.length - 5, item.MainPKr.length)}
-                          </li>
-                        )
-                      })
-                    }
-                  </ul> */}
                 </Modal>
                 {/* <div className="methodbtn">
                   <Button>获取方式</Button>
@@ -646,7 +639,7 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                         <div className="listitem">
                           {
-                            miner.level === 0 ? <Input placeholder="hAYBo5yIHmP" onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
+                            miner.level === 0 ? <Input placeholder="请填写推荐嘛" onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
                             // placeholder={miner.recommendid}
                           }
 
@@ -709,7 +702,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日节点(黄金)</p>
+                      <p>当日节点</p>
 
                     </div>
                     <div className="right">
