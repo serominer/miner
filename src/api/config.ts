@@ -1,4 +1,5 @@
-export const address: string = "3Y7qm4UkqBd58k1tnNVihg3kg2H5W85GZHsnZhNoTNrDkstDjud1jKztXs3ZJXNNGhiivQaryaXS6uTmDGypxBWG";
+// export const address: string = "53RtTQWAsgGwR4v6G52NZN9NbULH2dpxKsSZD2JJrfJ5NCHZim7ZVgJXzL4WQmh3p1NnVsUeph1SM8msMHK4hHs2";
+export const address: string = "2B9KApNM8yKgHioGrUBkZLTGTz1jGvAtqYnP8gxTNpHrRdkTb3HquxmUkuNWjaWVG3SeRy3KnLGQVz7bwMLvPgFG";
 export const abi: any =[
 	{
 		"inputs": [],
@@ -48,17 +49,27 @@ export const abi: any =[
 					},
 					{
 						"internalType": "uint256",
-						"name": "nodeProfid",
+						"name": "recommendProfit",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "communityProfid",
+						"name": "nodeProfit",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "staticTimestamp",
+						"name": "communityProfit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dynamicTimestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "drawTimestamp",
 						"type": "uint256"
 					}
 				],

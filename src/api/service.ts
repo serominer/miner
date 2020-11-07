@@ -26,7 +26,7 @@ class Service {
             }, 5000)
         })
     }
-    
+
     async rpc(method: string, args: any) {
         return new Promise((resolve, reject) => {
             this.initDApp().then((host: any) => {
@@ -66,14 +66,14 @@ class Service {
 
     async initDApp() {
         const dapp = {
-            name: "SEEDMIX ",
+            name: "MINER",
             contractAddress: config.address,
             github: "https://github.com/conspay/coinhi",
-            author: "seedmix",
+            author: "MINER",
             url: window.location.origin + window.location.pathname,
             logo: window.location.origin + window.location.pathname + "logo.png",
-            barColor: "#00424a",
-            navColor: "#00424a",
+            barColor: "#00107e",
+            navColor: "#00107e",
             barMode: "dark",
             navMode: "light"
         }

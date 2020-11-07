@@ -19,12 +19,33 @@ class Contract {
         this.contract = serojs.callContract(config.abi, config.address)
     }
 
-    async details(mainPKr: string){
-        const res=await this.call("details",[],mainPKr)
+    async details(mainPKr: string) {
+        const res = await this.call("details", [], mainPKr)
         return res;
     }
-    
-    async call(method: string, args: Array<any>, from: string): Promise<any> {
+
+    async canwithdraw(account: any, cy: string) {
+        const res = await this.execute("withdrawBalance", [cy], account);
+        return res;
+    }
+    async canwithdrawCall(account: any, cy: string) {
+        const res = await this.call("withdrawBalance", [cy], account.MainPKr);
+        return res;
+    }
+
+    async invest(account: any, arg: any, cy: string, value: string) {
+        const res = await this.execute("invest", [arg], account,cy,value);
+        return res;
+    }
+
+    async investCall(account: any, arg: any, cy: string, value?: string) {
+        const res = await this.call("invest", [arg], account.MainPKr, cy, value);
+        return res;
+    }
+
+
+
+    async call(method: string, args: Array<any>, from: string,cy?:string,value?:string): Promise<any> {
         const packData: any = this.contract.packData(method, args, true)
         const contract = this.contract;
         return new Promise((resolve, reject) => {
@@ -33,11 +54,20 @@ class Contract {
             }
             params.from = from
             params.data = packData;
-
+            if (cy) {
+                params.cy = cy;
+            }
+            if (value) {
+                params.value = value;
+            }
             service.rpc("sero_call", [params, "latest"]).then(data => {
                 if (data != "0x") {
-                    const rest: any = contract.unPackDataEx(method, data)
-                    resolve(rest)
+                    const rest: any = contract.unPackDataEx(method, data);
+                    if(rest.__length__ > 0) {
+                        resolve(rest)
+                    } else {
+                        resolve(data)
+                    }
                 } else {
                 }
             }).catch(err => {
@@ -47,18 +77,6 @@ class Contract {
         })
     }
 
-    async balanceOf(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            service.rpc("sero_getBalance", [config.address, "latest"]).then(data => {
-                if (data != "0x") {
-                    resolve(data)
-                } else {
-                }
-            }).catch(err => {
-                reject(err)
-            })
-        })
-    }
 
     async execute(method: string, args: Array<any>, account: any, cy?: string, value?: string): Promise<any> {
         const packData: any = this.contract.packData(method, args, true)

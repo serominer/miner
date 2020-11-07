@@ -2,8 +2,39 @@ p {
   margin-bottom: 0px;
 }
 .miner {
-  background-color: #120c7b;
-  padding-bottom: 20px;
+  position: relative;
+}
+.miner .bg {
+  width: 100%;
+  position: absolute;
+  z-index: -10;
+  height: 0px;
+}
+.miner .bg .bg1 {
+  position: relative;
+}
+.miner .bg .bg1 img {
+  width: 100%;
+  height: 200px;
+}
+.miner .bg .bg2 {
+  position: relative;
+  top: -30px;
+  z-index: -11;
+}
+.miner .bg .bg2 img {
+  width: 100%;
+  z-index: -11;
+  height: 600px;
+}
+.miner .bg .bg3 {
+  position: relative;
+  top: -30px;
+  z-index: -11;
+}
+.miner .bg .bg3 img {
+  width: 100%;
+  height: 150px;
 }
 .miner .content {
   margin: 0 15px;
@@ -33,7 +64,7 @@ p {
   margin-right: 15px;
 }
 .miner .content .userbox .usercontent .users .img img {
-  height: 60px;
+  height: 50px;
 }
 .miner .content .userbox .usercontent .users div {
   text-align: center;
@@ -46,6 +77,7 @@ p {
 }
 .miner .content .userbox .usercontent .userinfo .username p {
   color: #ffffff;
+  font-size: 12px;
 }
 .miner .content .userbox .usercontent .userinfo .usermoney {
   margin-top: 20px;
@@ -81,7 +113,7 @@ p {
   padding-bottom: 10px;
 }
 .miner .content .listbox .listcontent .top .left {
-  flex: 3;
+  flex: 2;
   display: flex;
 }
 .miner .content .listbox .listcontent .top .left .level p {
@@ -92,13 +124,14 @@ p {
   height: 20px;
   line-height: 40px;
   padding: 0px 5px;
+  margin-top: 10px;
 }
 .miner .content .listbox .listcontent .top .left .leveltitle p {
   color: #ff9600;
   line-height: 40px;
 }
 .miner .content .listbox .listcontent .top .right {
-  flex: 4;
+  flex: 3;
   display: flex;
 }
 .miner .content .listbox .listcontent .top .right .left {
@@ -109,6 +142,7 @@ p {
   width: 100%;
 }
 .miner .content .listbox .listcontent .top .right .left div p {
+  font-size: 12px;
   color: #ffffff;
 }
 .miner .content .listbox .listcontent .top .right .right {
@@ -173,6 +207,8 @@ p {
 .miner .content .contractbox .contractcontent p {
   padding-bottom: 10px;
   color: #ffffff;
+  white-space: normal;
+  word-break: break-all;
 }
 .miner .content .myinformation {
   background-color: rgba(0, 18, 89, 0.8);
@@ -219,6 +255,38 @@ p {
 .withdrawbox .ant-modal-header {
   border-bottom: none !important;
 }
+.withdrawbox .ant-select {
+  width: 100%;
+}
+.withdrawbox .ant-modal-body {
+  padding: 0 24px 10px 24px;
+}
+.withdrawbox .withdrawboxcontent .contentitem {
+  display: flex;
+  padding: 10px 0;
+}
+.withdrawbox .withdrawboxcontent .contentitem .left {
+  flex: 1;
+}
+.withdrawbox .withdrawboxcontent .contentitem .right {
+  flex: 2;
+}
+.withdrawbox .withdrawboxcontent .contentitem .right p {
+  margin-left: 20px;
+  color: #888888;
+  line-height: 32px;
+  font-size: 12px;
+}
+.withdrawbox .withdrawboxcontent .footer {
+  width: 100%;
+  padding: 10px 0;
+}
+.withdrawbox .withdrawboxcontent .footer .footerbtn {
+  text-align: center;
+}
+.withdrawbox .withdrawboxcontent .footer .footerbtn img {
+  height: 35px;
+}
 .upgradebox {
   width: 80% !important;
   border-radius: 10px;
@@ -243,12 +311,18 @@ p {
   margin-bottom: 10px;
   border-radius: 3px;
   color: #ffffff;
+  flex-wrap: wrap;
+}
+.upgradebox .upgradeboxcontent .listbox .listitem .box {
+  width: 100%;
+  display: flex;
 }
 .upgradebox .upgradeboxcontent .listbox .listitem .detailinfo {
   flex: 3;
 }
 .upgradebox .upgradeboxcontent .listbox .listitem .detailinfo p {
   color: #ffffff;
+  font-size: 12px;
 }
 .upgradebox .upgradeboxcontent .listbox .listitem .levelinfo {
   flex: 2;
@@ -261,7 +335,98 @@ p {
 .upgradebox .upgradeboxcontent .listbox .listitem .levelinfo p {
   color: #ff9600;
 }
+.upgradebox .upgradeboxcontent .listbox .listboxitemin {
+  border: 1px solid #c69459;
+}
 .upgradebox .upgradeboxcontent .footer img {
   text-align: center;
   width: 100%;
+}
+.userboxs {
+  width: 80% !important;
+  border-radius: 10px;
+}
+.userboxs .ant-modal-title {
+  font-weight: bold;
+  text-align: center;
+}
+.userboxs .ant-modal-body {
+  padding: 0 24px !important;
+  padding-bottom: 24px !important;
+}
+.userboxs .ant-modal-header {
+  border-bottom: none !important;
+}
+.userboxs .usercontent {
+  width: 100%;
+  min-height: 80px;
+  max-height: 80px;
+  overflow-y: scroll;
+  list-style: none;
+}
+.userboxs .usercontent li {
+  padding: 5px 0;
+}
+.ant-btn:hover,
+.ant-btn:focus {
+  color: black;
+  border: none;
+}
+.ant-btn,
+.ant-btn {
+  color: black;
+  border: none;
+}
+.lookmodal {
+  display: flex;
+  position: absolute;
+  z-index: 99;
+}
+.lookmodal div {
+  text-align: center;
+  flex: 1;
+}
+.lookmodal div .ant-statistic-title {
+  color: #1c2635 !important;
+}
+.loading {
+  position: fixed;
+  width: 90px;
+  height: 90px;
+  top: 50%;
+  left: 50%;
+  margin-top: -45px;
+  margin-left: -45px;
+  color: #ffffff;
+  z-index: 999;
+  text-align: center;
+  justify-content: space-around;
+  align-items: center;
+}
+.loading .ant-spin-container {
+  border-radius: 5px;
+}
+.loading .ant-alert-info {
+  background-color: rgba(59, 59, 59, 0.9);
+  border: none;
+  color: #ffffff;
+}
+.loading .ant-alert-with-description .ant-alert-message {
+  color: #ffffff;
+}
+.loading .ant-spin {
+  color: #ffffff;
+  font-size: 16px;
+  height: 90px;
+  background-color: rgba(59, 59, 59, 0.9);
+  border-radius: 5px;
+}
+.loading .ant-spin-container ant-spin-blur {
+  height: 90px;
+}
+.loading .ant-spin-nested-loading {
+  height: 90px;
+}
+.loadingbox {
+  display: none;
 }
