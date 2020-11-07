@@ -2,6 +2,7 @@
   "name": "serominer",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@craco/craco": "^5.7.0",
     "@testing-library/jest-dom": "^5.11.4",
