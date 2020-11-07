@@ -1,4 +1,4 @@
-export const address: string = "4qcNHkcFYfNu4H9NhtTKQBdd1kS5kQMexwMaQysW9Te4bg6W7H1Yckg1dVHrpjyRAf53NHtTN6Va7cW4cZ7xes2Y";
+export const address: string = "3YbxBSTWhUGCdWYyBbxitYF8FAJ6QxedZoNQYymkT6vs6Dh2DddcHmv8itRoTQ8ZaqQ3LZ61W1hsfboSWCrg4yR8";
 export const abi: any =[
 	{
 		"inputs": [],

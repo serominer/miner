@@ -5,6 +5,7 @@ import service from '../../api/service';
 import contract from '../../api/contract';
 import BigNumber from 'bignumber.js'
 import { LoadingOutlined, CloseCircleOutlined, CheckCircleOutlined, CopyOutlined } from '@ant-design/icons';
+import copy from 'copy-to-clipboard'
 
 import logo from '../../images/logo.png';
 import head from '../../images/head.png';
@@ -26,7 +27,6 @@ const { Option } = Select;
 const errIcon = <CloseCircleOutlined style={{ fontSize: 24 }} />
 const successIcon = <CheckCircleOutlined style={{ fontSize: 24 }} />
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-const copyIcon = <CopyOutlined style={{ fontSize: 24 }} />
 interface Miners {
   data: Array<any>,
   withdrawvisible: boolean,
@@ -37,7 +37,7 @@ interface Miners {
   account: object,
   mainpkr: string,
   serobalance: string,
-  myid: number,
+  myid: string,
   amount: number,
   allNodeNum: number,
   recommendid: number,
@@ -46,8 +46,8 @@ interface Miners {
   returnAmount: number,
   canWithdrawAmount: number,
   returnnowday: number,
-  communityProfid: number,
-  nodeProfid: number,
+  communityProfit: number,
+  nodeProfit: number,
   recommendProfit: number,
   level: number,
   levelnum: number,
@@ -72,7 +72,7 @@ class Miner extends React.Component<any, Miners> {
     account: {},
     mainpkr: "",
     serobalance: "0",
-    myid: 0,
+    myid: "0",
     recommendid: 0,
     amount: 0,
     allNodeNum: 0,
@@ -81,8 +81,8 @@ class Miner extends React.Component<any, Miners> {
     returnAmount: 0,
     canWithdrawAmount: 0,
     returnnowday: 0,
-    communityProfid: 0,
-    nodeProfid: 0,
+    communityProfit: 0,
+    nodeProfit: 0,
     recommendProfit: 0,
     level: 0,
     levelnum: 0,
@@ -166,6 +166,7 @@ class Miner extends React.Component<any, Miners> {
       that.setState({
         myid: res[0],
         recommendid: res[1],
+        referralcode:res[1],
         allNodeNum: parseFloat(fromValue(res[2].allNodeNum, 18).toNumber().toFixed(2)),
         returnAmount: parseFloat(fromValue(res[2].returnAmount, 18).toNumber().toFixed(2)),
         canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
@@ -173,8 +174,8 @@ class Miner extends React.Component<any, Miners> {
         amount: parseFloat(fromValue(res[2].amount, 18).toNumber().toFixed(2)),
         lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m'),
         recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2)),
-        nodeProfid: parseFloat(fromValue(res[2].nodeProfid, 18).toNumber().toFixed(2)),
-        communityProfid: parseFloat(fromValue(res[2].communityProfid, 18).toNumber().toFixed(2))
+        nodeProfit: parseFloat(fromValue(res[2].nodeProfit, 18).toNumber().toFixed(2)),
+        communityProfit: parseFloat(fromValue(res[2].communityProfit, 18).toNumber().toFixed(2))
       })
     })
   }
@@ -330,7 +331,6 @@ class Miner extends React.Component<any, Miners> {
   }
 
   sendnum(e: any) {
-
     const that = this;
     that.setState({
       sendTxtnumber: 0,
@@ -358,7 +358,6 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-    console.log(that.state.referralcode.length)
     if (that.state.referralcode.length !== 0) {
       if (that.state.level !== 0) {
         if (that.state.sendnum === 0) {
@@ -458,6 +457,12 @@ class Miner extends React.Component<any, Miners> {
     }
     return format;
   }
+
+  copytext(){
+    if(copy(this.state.myid)){
+      message.info("success");
+    }
+  }
   render() {
     const miner = this.state;
     return (
@@ -521,7 +526,6 @@ class Miner extends React.Component<any, Miners> {
                         onClick={() => this.selectName(item.MainPKr, item.Name)}
                       >
                         <List.Item.Meta
-
                           description={`${item.Name}     ${item.MainPKr.substring(0, 5)}.....${item.MainPKr.substring(item.MainPKr.length - 5, item.MainPKr.length)}`}
 
                         />
@@ -716,7 +720,7 @@ class Miner extends React.Component<any, Miners> {
                       </p>
                     </div>
                     <div className="right">
-                      <p>{miner.nodeProfid}</p>
+                      <p>{miner.nodeProfit}</p>
                     </div>
                   </div>
                 </div>
@@ -741,7 +745,7 @@ class Miner extends React.Component<any, Miners> {
                       </p>
                     </div>
                     <div className="right">
-                      <p>{miner.communityProfid}</p>
+                      <p>{miner.communityProfit}</p>
                     </div>
                   </div>
                 </div>
@@ -815,13 +819,13 @@ class Miner extends React.Component<any, Miners> {
                 </div>
               </div>
               <div>
-                <p>ID:{miner.myid}</p>
+                <p>ID:{miner.myid}<CopyOutlined onClick={()=>this.copytext()} style={{ fontSize: 14 }} /></p>
               </div>
               <div>
                 <p>推荐伙伴ID：{miner.recommendid}</p>
               </div>
               <div>
-                <p>最近结算时间：{miner.lastreturntime}</p>
+                <p>最近结算时间：{miner.lastreturntime} </p>
               </div>
             </div>
           </div>
