@@ -39,7 +39,6 @@ class Contract {
     }
 
     async investCall(account: any, arg: any, cy: string, value?: string) {
-        // console.log( "account.MainPKr>>>>>>",account.MainPKr, arg, cy, value)
         const res = await this.call("invest", [arg], account.MainPKr, cy, value);
         return res;
     }
@@ -62,7 +61,6 @@ class Contract {
             service.rpc("sero_call", [params, "latest"]).then(data => {
                 if (data != "0x") {
                     const rest: any = contract.unPackDataEx(method, data);
-                    console.log(data)
                     if(rest.__length__ > 0) {
                         resolve(rest)
                     } else {

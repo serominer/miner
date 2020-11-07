@@ -122,13 +122,18 @@ class Miner extends React.Component<any, Miners> {
 
   componentDidMount() {
     const that = this;
-    that.gatdata()
+    that.gatdata();
+    let interId: any = sessionStorage.getItem("interId");
+    if (interId) {
+      clearInterval(interId)
+    }
+    interId = setInterval(() => that.getdetail(that.state.mainpkr), 10 * 10 ** 3);
+    sessionStorage.setItem("interId", interId)
   }
   gatdata = () => {
     const that = this;
     service.accountList().then((res: any) => {
       let userobj: any = {};
-      console.log(sessionStorage.getItem("userName"))
       if (sessionStorage.getItem("userName")?.length === undefined) {
         userobj = res.find(function (item: any) {
           return item.IsCurrent === true;
@@ -166,7 +171,7 @@ class Miner extends React.Component<any, Miners> {
       that.setState({
         myid: res[0],
         recommendid: res[1],
-        referralcode:res[1],
+        referralcode: res[1],
         allNodeNum: parseFloat(fromValue(res[2].allNodeNum, 18).toNumber().toFixed(2)),
         returnAmount: parseFloat(fromValue(res[2].returnAmount, 18).toNumber().toFixed(2)),
         canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
@@ -217,8 +222,6 @@ class Miner extends React.Component<any, Miners> {
   }
 
   levelborder = (v: number) => {
-    console.log("levelborder>>>>>>>>>>>>>>", v)
-
     const that = this;
     let levelBorder = [
       {
@@ -248,7 +251,6 @@ class Miner extends React.Component<any, Miners> {
     that.setState({
       levelborder: levelBorder
     })
-    console.log(that.state.levelborder[0].name)
   }
 
 
@@ -458,8 +460,8 @@ class Miner extends React.Component<any, Miners> {
     return format;
   }
 
-  copytext(){
-    if(copy(this.state.myid)){
+  copytext() {
+    if (copy(this.state.myid)) {
       message.info("success");
     }
   }
@@ -500,7 +502,7 @@ class Miner extends React.Component<any, Miners> {
                   <p>{miner.showusermainpkr}</p>
                 </div>
                 <div className="usermoney">
-                  <p>{miner.serobalance} SERO</p>
+                  <p>{miner.serobalance === 'NaN' ? 0 : miner.serobalance} SERO</p>
                 </div>
               </div>
               <div className="userbtn">
@@ -533,9 +535,6 @@ class Miner extends React.Component<any, Miners> {
                     )}
                   />
                 </Modal>
-                {/* <div className="methodbtn">
-                  <Button>获取方式</Button>
-                </div> */}
               </div>
             </div>
           </div>
@@ -643,7 +642,7 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                         <div className="listitem">
                           {
-                            miner.level === 0 ? <Input placeholder="请填写推荐嘛" onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
+                            miner.level === 0 ? <Input placeholder="请填写推荐码" onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
                             // placeholder={miner.recommendid}
                           }
 
@@ -684,7 +683,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>推荐奖励</p>
+                      <p>当日推荐奖励</p>
 
                     </div>
                     <div className="right">
@@ -819,7 +818,12 @@ class Miner extends React.Component<any, Miners> {
                 </div>
               </div>
               <div>
-                <p>ID:{miner.myid}<CopyOutlined onClick={()=>this.copytext()} style={{ fontSize: 14 }} /></p>
+
+                <p>ID:{miner.myid}
+                  {
+                    miner.myid === "" ? <div></div> : <CopyOutlined onClick={() => this.copytext()} style={{ fontSize: 14 }} />
+                  }
+                </p>
               </div>
               <div>
                 <p>推荐伙伴ID：{miner.recommendid}</p>
