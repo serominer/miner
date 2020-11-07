@@ -66,10 +66,10 @@ class Service {
 
     async initDApp() {
         const dapp = {
-            name: "MINER",
+            name: "Sero Miner",
             contractAddress: config.address,
-            github: "https://github.com/conspay/coinhi",
-            author: "MINER",
+            github: "https://github.com/serominer/miner",
+            author: "Sero Miner",
             url: window.location.origin + window.location.pathname,
             logo: window.location.origin + window.location.pathname + "logo.png",
             barColor: "#00107e",

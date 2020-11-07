@@ -1,6 +1,6 @@
 import React from 'react';
 import './Miner.css';
-import { Spin, Alert, Button, Modal, Input, Select, List } from 'antd';
+import { InputNumber, message, Spin, Alert, Button, Modal, Input, Select, List } from 'antd';
 import service from '../../api/service';
 import contract from '../../api/contract';
 import BigNumber from 'bignumber.js'
@@ -56,9 +56,10 @@ interface Miners {
   loading: any,
   withdrawChangenum: number,
   sendTxt: string,
-  levelborder: any
+  sendTxtnumber: number,
+  levelborder: any,
+  recommendProfit: number
 }
-
 
 class Miner extends React.Component<any, Miners> {
   state: Miners = {
@@ -95,13 +96,28 @@ class Miner extends React.Component<any, Miners> {
     },
     withdrawChangenum: 0,
     sendTxt: "",
-    levelborder: {
-      levelboxone: "listitem",
-      levelboxtwo: "listitem",
-      levelboxthere: "listitem",
-      levelboxfour: "listitem",
-      levelboxfive: "listitem",
-    }
+    sendTxtnumber: 0,
+    levelborder: [
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      }
+    ],
+    recommendProfit:0
   }
 
   componentDidMount() {
@@ -112,6 +128,7 @@ class Miner extends React.Component<any, Miners> {
     const that = this;
     service.accountList().then((res: any) => {
       let userobj: any = {};
+      console.log(sessionStorage.getItem("userName"))
       if (sessionStorage.getItem("userName")?.length === undefined) {
         userobj = res.find(function (item: any) {
           return item.IsCurrent === true;
@@ -121,11 +138,12 @@ class Miner extends React.Component<any, Miners> {
           return item.Name === sessionStorage.getItem("userName");
         })
       }
+      console.log("user", userobj);
       let strmainpk: string = userobj.MainPKr;
       let length = strmainpk.length;
       let startmainpkr = strmainpk.substring(0, 5);
       let endmainpkr = strmainpk.substring(length - 5, length)
-      let strmainpkr = startmainpkr + "..." + endmainpkr;
+      let strmainpkr = startmainpkr + "....." + endmainpkr;
 
       that.setState({
         data: res,
@@ -153,7 +171,8 @@ class Miner extends React.Component<any, Miners> {
         canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
         returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
         amount: parseFloat(fromValue(res[2].amount, 18).toNumber().toFixed(2)),
-        lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m')
+        lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m'),
+        recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2))
       })
     })
   }
@@ -191,7 +210,44 @@ class Miner extends React.Component<any, Miners> {
         levelnum: 0
       })
     }
+    that.levelborder(that.state.level)
   }
+
+  levelborder = (v: number) => {
+    console.log("levelborder>>>>>>>>>>>>>>", v)
+
+    const that = this;
+    let levelBorder = [
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      },
+      {
+        name: "listitem"
+      }
+    ]
+    for (let i = 0; i < levelBorder.length; i++) {
+      if (i === v) {
+        levelBorder[i].name = "listitem listboxitemin"
+      }
+    }
+    that.setState({
+      levelborder: levelBorder
+    })
+    console.log(that.state.levelborder[0].name)
+  }
+
 
   closewithdraw() {
     const that = this;
@@ -272,23 +328,22 @@ class Miner extends React.Component<any, Miners> {
   }
 
   sendnum(e: any) {
+
     const that = this;
-    console.log(that.state.sendcy)
     that.setState({
-      sendTxt: ""
+      sendTxtnumber: 0,
+      sendTxt: "",
+      sendnum: e,
     })
-    contract.investCall(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(e.target.value).multipliedBy(10 ** 18).toString(16)).then((res) => {
+    contract.investCall(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
       if (res !== "") {
         let num = parseFloat(fromValue(res, 18).toNumber().toFixed(2));
         that.setState({
+          sendTxtnumber: num,
           sendTxt: "可兑换" + num + "SUSD"
         })
       } else {
       }
-    })
-
-    that.setState({
-      sendnum: e.target.value,
     })
   }
   sendChange(value: any) {
@@ -301,27 +356,59 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-    that.setState({
-      upgradevisible: false
-    })
-    contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-      that.loading("loading", true, "", "")
-      service.getTransactionReceipt(hash).then((res) => {
-        that.loading("loading", false, "SUCCESSFULLY", successIcon)
-        setTimeout(function () {
-          that.gatdata();
-        }, 1500);
-      })
-    })
+    console.log()
+    if (that.state.level !== 0) {
+      if (that.state.sendnum === 0) {
+        message.warning('请输入你要升级的金额')
+      } else {
+        that.setState({
+          upgradevisible: false
+        })
+        contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+          that.loading("loading", true, "", "")
+          service.getTransactionReceipt(hash).then((res) => {
+            that.loading("loading", false, "SUCCESSFULLY", successIcon)
+            setTimeout(function () {
+              that.gatdata();
+            }, 1500);
+          })
+        })
+      }
+    } else {
+
+      if (that.state.sendTxtnumber >= 300) {
+        that.setState({
+          upgradevisible: false
+        })
+        contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+          that.loading("loading", true, "", "")
+          service.getTransactionReceipt(hash).then((res) => {
+            that.loading("loading", false, "SUCCESSFULLY", successIcon)
+            setTimeout(function () {
+              that.gatdata();
+            }, 1500);
+          })
+        })
+      } else {
+        message.error('首次创建需要输入大于等于300的SUSD');
+      }
+    }
+
+
+
+
   }
 
-  selectName(e: any) {
+  selectName(mainPkr: any, name: any) {
     const that = this;
-    that.getdetail(e.target.dataset.mainpkr);
+    console.log("selectname", mainPkr, name)
+    that.getdetail(mainPkr);
     let userobj = that.state.data.find(function (item: any) {
-      return item.Name === e.target.dataset.name;
+      return item.Name === name;
     })
-    let userName = e.target.dataset.name;
+
+    let userName = name;
+
     sessionStorage.setItem("userName", userName);
 
     let strmainpk: string = userobj.MainPKr;
@@ -373,7 +460,6 @@ class Miner extends React.Component<any, Miners> {
   }
   render() {
     const miner = this.state;
-
     return (
       <div className="miner">
         <div className="bg">
@@ -424,7 +510,27 @@ class Miner extends React.Component<any, Miners> {
                   footer={null}
                   centered={true}
                 >
-                  <ul className="usercontent">
+
+                  <List
+                    size="small"
+                    className="userlistbox"
+                    itemLayout="horizontal"
+                    dataSource={this.state.data}
+                    renderItem={item => (
+                      <List.Item
+                        onClick={() => this.selectName(item.MainPKr, item.Name)}
+                      >
+                        <List.Item.Meta
+
+                          description={`${item.Name}     ${item.MainPKr.substring(0, 5)}.....${item.MainPKr.substring(item.MainPKr.length - 5, item.MainPKr.length)}`}
+
+                        />
+                      </List.Item>
+                    )}
+                  />
+
+                  {/* <ul className="usercontent">
+
                     {
                       this.state.data.map((item: any, index: number) => {
                         return (
@@ -434,7 +540,7 @@ class Miner extends React.Component<any, Miners> {
                         )
                       })
                     }
-                  </ul>
+                  </ul> */}
                 </Modal>
                 {/* <div className="methodbtn">
                   <Button>获取方式</Button>
@@ -485,7 +591,7 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                       </div>
                       <div className="listbox">
-                        <div className={miner.levelborder.levelboxone}>
+                        <div className={miner.levelborder[1].name}>
                           <div className="detailinfo">
                             <p>300 SUSD-799 SUSD</p>
                           </div>
@@ -494,7 +600,7 @@ class Miner extends React.Component<any, Miners> {
                             <p>白银会员</p>
                           </div>
                         </div>
-                        <div className={miner.levelborder.levelboxone}>
+                        <div className={miner.levelborder[2].name}>
                           <div className="detailinfo">
                             <p>800 SUSD-1999 SUSD</p>
                           </div>
@@ -503,7 +609,7 @@ class Miner extends React.Component<any, Miners> {
                             <p>黄金会员</p>
                           </div>
                         </div>
-                        <div className={miner.levelborder.levelboxone}>
+                        <div className={miner.levelborder[3].name}>
                           <div className="detailinfo">
                             <p>2000 SUSD-4999 SUSD</p>
                           </div>
@@ -512,7 +618,7 @@ class Miner extends React.Component<any, Miners> {
                             <p>白金会员</p>
                           </div>
                         </div>
-                        <div className={miner.levelborder.levelboxone}>
+                        <div className={miner.levelborder[4].name}>
                           <div className="detailinfo">
                             <p>5000 SUSD-9999 SUSD</p>
                           </div>
@@ -522,7 +628,7 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                         </div>
 
-                        <div className={miner.levelborder.levelboxone}>
+                        <div className={miner.levelborder[5].name}>
                           <div className="detailinfo">
                             <p>10000 SUSD</p>
                           </div>
@@ -538,7 +644,7 @@ class Miner extends React.Component<any, Miners> {
                               <Option value="SUSD_T">SUSD_T</Option>
                               <Option value="SERO">SERO</Option>
                             </Select>
-                            <Input placeholder="输入金额" onChange={(e) => this.sendnum(e)} />
+                            <InputNumber min={0} placeholder="输入金额" onChange={(e) => this.sendnum(e)} />
                           </div>
                           <div>
                             <p>{miner.sendTxt}</p>
@@ -587,6 +693,28 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
+                      <p>推荐奖励</p>
+
+                    </div>
+                    <div className="right">
+                      <p></p>
+                    </div>
+                  </div>
+                  <div className="rightbox">
+                    <div className="left">
+                      <p>
+                        奖励：
+                      </p>
+                    </div>
+                    <div className="right">
+                      <p>{miner.recommendProfit}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rowbox">
+                  <div className="leftbox">
+                    <div className="left">
                       <p>当日节点(黄金)</p>
 
                     </div>
@@ -609,8 +737,11 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日社区(V2)</p>
-
+                      <p>当日社区(
+                        {
+                          <span>v2</span>
+                        }
+                        )</p>
                     </div>
                     <div className="right">
                       <p></p>
