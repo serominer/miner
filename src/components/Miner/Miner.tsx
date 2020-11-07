@@ -375,7 +375,6 @@ class Miner extends React.Component<any, Miners> {
         })
       }
     } else {
-
       if (that.state.sendTxtnumber >= 300) {
         that.setState({
           upgradevisible: false
@@ -393,15 +392,10 @@ class Miner extends React.Component<any, Miners> {
         message.error('首次创建需要输入大于等于300的SUSD');
       }
     }
-
-
-
-
   }
 
   selectName(mainPkr: any, name: any) {
     const that = this;
-    console.log("selectname", mainPkr, name)
     that.getdetail(mainPkr);
     let userobj = that.state.data.find(function (item: any) {
       return item.Name === name;
@@ -853,7 +847,6 @@ class Miner extends React.Component<any, Miners> {
     )
   }
 }
-
 
 
 function fromValue(v: number | string | undefined, d: number): BigNumber {
