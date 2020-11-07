@@ -55,8 +55,8 @@ interface Miners {
   withdrawcy: string,
   loading: any,
   withdrawChangenum: number,
-  sendTxt: string
-
+  sendTxt: string,
+  levelborder: any
 }
 
 
@@ -94,7 +94,14 @@ class Miner extends React.Component<any, Miners> {
       message: null
     },
     withdrawChangenum: 0,
-    sendTxt: ""
+    sendTxt: "",
+    levelborder: {
+      levelboxone: "listitem",
+      levelboxtwo: "listitem",
+      levelboxthere: "listitem",
+      levelboxfour: "listitem",
+      levelboxfive: "listitem",
+    }
   }
 
   componentDidMount() {
@@ -228,10 +235,11 @@ class Miner extends React.Component<any, Miners> {
     })
   }
 
-  referralcodeChange(value: any) {
+  referralcodeChange(e: any) {
+    console.log(e.target.value)
     const that = this;
     that.setState({
-      referralcode: value
+      referralcode: e.target.value
     })
   }
 
@@ -365,6 +373,7 @@ class Miner extends React.Component<any, Miners> {
   }
   render() {
     const miner = this.state;
+
     return (
       <div className="miner">
         <div className="bg">
@@ -427,9 +436,9 @@ class Miner extends React.Component<any, Miners> {
                     }
                   </ul>
                 </Modal>
-                <div className="methodbtn">
+                {/* <div className="methodbtn">
                   <Button>获取方式</Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -476,7 +485,7 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                       </div>
                       <div className="listbox">
-                        <div className="listitem">
+                        <div className={miner.levelborder.levelboxone}>
                           <div className="detailinfo">
                             <p>300 SUSD-799 SUSD</p>
                           </div>
@@ -485,7 +494,7 @@ class Miner extends React.Component<any, Miners> {
                             <p>白银会员</p>
                           </div>
                         </div>
-                        <div className="listitem listboxitemin">
+                        <div className={miner.levelborder.levelboxone}>
                           <div className="detailinfo">
                             <p>800 SUSD-1999 SUSD</p>
                           </div>
@@ -494,7 +503,7 @@ class Miner extends React.Component<any, Miners> {
                             <p>黄金会员</p>
                           </div>
                         </div>
-                        <div className="listitem">
+                        <div className={miner.levelborder.levelboxone}>
                           <div className="detailinfo">
                             <p>2000 SUSD-4999 SUSD</p>
                           </div>
@@ -503,7 +512,7 @@ class Miner extends React.Component<any, Miners> {
                             <p>白金会员</p>
                           </div>
                         </div>
-                        <div className="listitem">
+                        <div className={miner.levelborder.levelboxone}>
                           <div className="detailinfo">
                             <p>5000 SUSD-9999 SUSD</p>
                           </div>
@@ -513,7 +522,7 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                         </div>
 
-                        <div className="listitem">
+                        <div className={miner.levelborder.levelboxone}>
                           <div className="detailinfo">
                             <p>10000 SUSD</p>
                           </div>
@@ -536,7 +545,12 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                         </div>
                         <div className="listitem">
-                          <Input placeholder="hAYBo5yIHmP" disabled={true} onChange={(e) => this.referralcodeChange(e)} />
+                          {
+                            miner.level === 0 ? <Input placeholder="hAYBo5yIHmP" onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
+                            // placeholder={miner.recommendid}
+                          }
+
+
                         </div>
                       </div>
                       <div className="footer">
@@ -553,7 +567,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日固定返还(SERO)</p>
+                      <p>当日固定返还(SUSD)</p>
                     </div>
                     <div className="right">
                       <p></p>
@@ -642,7 +656,7 @@ class Miner extends React.Component<any, Miners> {
                           <div><p>提币数量</p></div>
                           <div className="contentitem">
                             <div className="left">
-                              <Select defaultValue="SUSD_T" style={{ width: 80 }} onChange={(e) => this.withdrawChange(e)}>
+                              <Select defaultValue="SUSD_T" style={{ width: 100 }} onChange={(e) => this.withdrawChange(e)}>
                                 <Option value="SUSD_T">SUSD_T</Option>
                                 <Option value="SERO">SERO</Option>
                               </Select>
@@ -694,7 +708,6 @@ class Miner extends React.Component<any, Miners> {
             </div>
           </div>
         </div>
-
 
         <div className={this.state.loading.loadingbox}>
           <Spin indicator={antIcon} spinning={this.state.loading.status} tip="PENDING...">
