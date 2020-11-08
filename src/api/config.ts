@@ -1,5 +1,5 @@
-export const address: string = "wcBPLxAcxivHxQbyHg7mSDqpy3pkjRGWSNnaxXyT8yv8b7HV1K7VL34wkxVKxuREPpqc2CtbfQ2nVPiYxpMvv3R";
-export const abi: any =[
+export const address: string = "3ckdERncqtcwo7S4xxu3MoWqUHe5Lbu1SLVqMF7UxfLvLvimWHs7m7qDx5zD2bvzaAnPvPWZHveXyrTonZv3XPKE";
+export const abi: any = [
 	{
 		"inputs": [],
 		"name": "details",
@@ -48,6 +48,11 @@ export const abi: any =[
 					},
 					{
 						"internalType": "uint256",
+						"name": "achievement",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "recommendProfit",
 						"type": "uint256"
 					},
@@ -89,7 +94,13 @@ export const abi: any =[
 			}
 		],
 		"name": "invest",
-		"outputs": [],
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
 		"stateMutability": "payable",
 		"type": "function"
 	},
@@ -105,7 +116,7 @@ export const abi: any =[
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "value",
 				"type": "uint256"
 			}
 		],

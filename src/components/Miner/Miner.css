@@ -24,7 +24,7 @@ p {
 .miner .bg .bg2 img {
   width: 100%;
   z-index: -11;
-  height: 600px;
+  height: 640px;
 }
 .miner .bg .bg3 {
   position: relative;
@@ -76,9 +76,6 @@ p {
 .miner .content .userbox .usercontent .userinfo .username p {
   color: #ffffff;
   font-size: 12px;
-}
-.miner .content .userbox .usercontent .userinfo .usermoney {
-  margin-top: 20px;
 }
 .miner .content .userbox .usercontent .userinfo .usermoney p {
   font-size: 16px;
@@ -180,14 +177,11 @@ p {
 }
 .miner .content .listbox .listcontent .bottom .rowbox .rightbox {
   flex: 2;
-  display: flex;
-}
-.miner .content .listbox .listcontent .bottom .rowbox .rightbox .left {
-  flex: 2;
-  text-align: right;
 }
 .miner .content .listbox .listcontent .bottom .rowbox .rightbox .right {
   flex: 1;
+  text-align: right;
+  margin-right: 10px;
 }
 .miner .content .listbox .listcontent .bottom .rowbox .rightbox .right .ant-btn {
   background-color: #0c9e84;
@@ -282,8 +276,11 @@ p {
 .withdrawbox .withdrawboxcontent .footer .footerbtn {
   text-align: center;
 }
-.withdrawbox .withdrawboxcontent .footer .footerbtn img {
-  height: 35px;
+.withdrawbox .withdrawboxcontent .footer .footerbtn .ant-btn {
+  height: 35px !important;
+  color: #ffffff;
+  padding: 0px 50px !important;
+  letter-spacing: 4px;
 }
 .upgradebox {
   width: 80% !important;
@@ -296,11 +293,13 @@ p {
 .upgradebox .ant-modal-close-x {
   color: #ffffff;
 }
-.upgradebox .upgradeboxcontent .head .img {
+.upgradebox .upgradeboxcontent .head {
   text-align: center;
 }
-.upgradebox .upgradeboxcontent .head .img img {
-  height: 40px;
+.upgradebox .upgradeboxcontent .head h2 {
+  color: #e4b273;
+  font-weight: bold;
+  font-size: 36px;
 }
 .upgradebox .upgradeboxcontent .listbox .listitem {
   display: flex;
@@ -336,9 +335,15 @@ p {
 .upgradebox .upgradeboxcontent .listbox .listboxitemin {
   border: 1px solid #c69459;
 }
-.upgradebox .upgradeboxcontent .footer img {
+.upgradebox .upgradeboxcontent .footer .footerbtn {
+  height: 36px;
+  line-height: 34px;
+  border-radius: 5px;
+  background-color: #ba8643;
   text-align: center;
-  width: 100%;
+}
+.upgradebox .upgradeboxcontent .footer .footerbtn p {
+  color: #ffffff;
 }
 .userboxs {
   width: 80% !important;

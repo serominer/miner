@@ -28,7 +28,7 @@
                 img {
                     width: 100%;
                     z-index: -11;
-                    height: 600px;
+                    height: 640px;
                 }
             }
 
@@ -103,8 +103,6 @@
                         }
 
                         .usermoney {
-                            margin-top: 20px;
-
                             p {
                                 font-size: 16px;
                                 font-weight: bold;
@@ -239,16 +237,11 @@
 
                             .rightbox {
                                 flex: 2;
-                                display: flex;
-
-                                .left {
-                                    flex: 2;
-                                    text-align: right;
-                                }
 
                                 .right {
                                     flex: 1;
-
+                                    text-align: right;
+                                    margin-right: 10px;
                                     .ant-btn {
                                         background-color: #0c9e84;
                                     }
@@ -378,8 +371,11 @@
                 .footerbtn {
                     text-align: center;
 
-                    img {
-                        height: 35px;
+                    .ant-btn {
+                        height: 35px !important;
+                        color: #ffffff;
+                        padding: 0px 50px !important;
+                        letter-spacing: 4px;
                     }
                 }
             }
@@ -403,12 +399,12 @@
 
         .upgradeboxcontent {
             .head {
-                .img {
-                    text-align: center;
+                text-align: center;
 
-                    img {
-                        height: 40px;
-                    }
+                h2 {
+                    color: #e4b273;
+                    font-weight: bold;
+                    font-size: 36px;
                 }
             }
 
@@ -457,9 +453,17 @@
             }
 
             .footer {
-                img {
+
+                .footerbtn {
+                    height: 36px;
+                    line-height: 34px;
+                    border-radius: 5px;
+                    background-color: #ba8643;
                     text-align: center;
-                    width: 100%;
+
+                    p {
+                        color: #ffffff;
+                    }
                 }
             }
         }
@@ -579,16 +583,18 @@
     .loadingbox {
         display: none;
     }
-    .ant-input-number{
+
+    .ant-input-number {
         width: 100% !important;
     }
 
 
-    .userlistbox{
+    .userlistbox {
         min-height: 90px;
         max-height: 180px;
         overflow-y: scroll;
-        .userlistboxbtn{
+
+        .userlistboxbtn {
             background-color: #0c9e84;
         }
     }

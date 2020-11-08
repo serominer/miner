@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import * as config from './config';
 import service from "./service";
 const serojs = require("serojs");
@@ -34,7 +35,7 @@ class Contract {
     }
 
     async invest(account: any, arg: any, cy: string, value: string) {
-        const res = await this.execute("invest", [arg], account,cy,value);
+        const res = await this.execute("invest", [arg], account, cy, value);
         return res;
     }
 
@@ -43,7 +44,16 @@ class Contract {
         return res;
     }
 
-    async call(method: string, args: Array<any>, from: string,cy?:string,value?:string): Promise<any> {
+    async isExist(account: any, code: string) {
+        const res = await this.call("invest", [code], account.MainPKr, "SUSD_T", "0x" + new BigNumber(3e24).toString(16));
+        if (res == "0x") {
+            return false;
+        }
+        return true;
+
+    }
+
+    async call(method: string, args: Array<any>, from: string, cy?: string, value?: string): Promise<any> {
         const packData: any = this.contract.packData(method, args, true)
         const contract = this.contract;
         return new Promise((resolve, reject) => {
@@ -61,12 +71,13 @@ class Contract {
             service.rpc("sero_call", [params, "latest"]).then(data => {
                 if (data != "0x") {
                     const rest: any = contract.unPackDataEx(method, data);
-                    if(rest.__length__ > 0) {
+                    if (rest.__length__ > 0) {
                         resolve(rest)
                     } else {
                         resolve(data)
                     }
                 } else {
+                    resolve(data)
                 }
             }).catch(err => {
                 reject(err)

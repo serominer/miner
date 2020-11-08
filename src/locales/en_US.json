@@ -31,10 +31,16 @@
   "Mycontractinformation":"My Contract Info",
   "Recommendedpartner":"Used Recommend",
   "Myrecommendation":"My Recommend",
-  "Lastsettlementtime":"最近结算时间",
+  "Lastsettlementtime":"Last settlement time",
   "Convertible":"Available Swap",
   "Upgradedamount":"Input Upgrade Amount",
   "Firstcreated":"The initial registration amount must be greater than",
   "fillinthereferralcode":"Input Recommend ID",
-  "fillinthecorrectreferralcode":"Make sure if the recommendID is right"
+  "fillinthecorrectreferralcode":"Make sure if the recommendID is right",
+  "success":"Success",
+  "currency":"Withdrawal",
+  "withdrawmoney":"Withdraw money",
+  "upgrades":"To Upgrade",
+ " upgrademember":"Upgrade Member",
+ " Totalperformance":"Total performance"
 }

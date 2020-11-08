@@ -39,8 +39,10 @@ interface Miners {
   account: object,
   mainpkr: string,
   serobalance: string,
+  susdbalance: string,
   myid: string,
   amount: number,
+  achievement: number,
   allNodeNum: number,
   directNodeNum: number,
   recommendid: number,
@@ -75,9 +77,11 @@ class Miner extends React.Component<any, Miners> {
     account: {},
     mainpkr: "",
     serobalance: "0",
+    susdbalance: "0",
     myid: "0",
     recommendid: 0,
     amount: 0,
+    achievement:0,
     allNodeNum: 0,
     directNodeNum: 0,
     sendnum: 0,
@@ -161,6 +165,7 @@ class Miner extends React.Component<any, Miners> {
         mainpkr: userobj.MainPKr,
         account: userobj,
         serobalance: new BigNumber(userobj.Balance.get("SERO")).dividedBy(10 ** 18).toFixed(2),
+        susdbalance: new BigNumber(userobj.Balance.get("SUSD_T")).dividedBy(10 ** 18).toFixed(2),
       })
       that.getdetail(userobj.MainPKr);
       that.loading("loadingbox", false, "", null);
@@ -182,11 +187,12 @@ class Miner extends React.Component<any, Miners> {
         communityProfit = parseFloat(fromValue(res[2].communityProfit, 18).toNumber().toFixed(2));
       }
       that.setState({
+        achievement: parseFloat(fromValue(res[2].achievement, 18).toNumber().toFixed(2)),
         myid: res[0],
         recommendid: res[1],
         referralcode: res[1],
-        allNodeNum: parseFloat(fromValue(res[2].allNodeNum, 18).toNumber().toFixed(2)),
-        directNodeNum: parseFloat(fromValue(res[2].directNodeNum, 18).toNumber().toFixed(2)),
+        allNodeNum: res[2].allNodeNum,
+        directNodeNum: res[2].directNodeNum,
         returnAmount: parseFloat(fromValue(res[2].returnAmount, 18).toNumber().toFixed(2)),
         canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
         returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
@@ -327,7 +333,7 @@ class Miner extends React.Component<any, Miners> {
     contract.canwithdraw(that.state.account, that.state.withdrawcy).then((hash) => {
       that.loading("loading", true, "", "")
       service.getTransactionReceipt(hash).then((res) => {
-        that.loading("loading", false, "SUCCESSFULLY", successIcon)
+        that.loading("loading", false, `${i18n.t("success")}`, successIcon)
         setTimeout(function () {
           that.gatdata();
         }, 1500);
@@ -337,11 +343,12 @@ class Miner extends React.Component<any, Miners> {
   }
 
   referralcodeChange(e: any) {
-    console.log(e.target.value)
     const that = this;
     that.setState({
       referralcode: e.target.value
     })
+
+
   }
 
   closeupgrade() {
@@ -384,7 +391,7 @@ class Miner extends React.Component<any, Miners> {
         let num = parseFloat(fromValue(res, 18).toNumber().toFixed(2));
         that.setState({
           sendTxtnumber: num,
-          sendTxt: "可兑换" + num + "SUSD"
+          sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
         })
       } else {
       }
@@ -400,45 +407,59 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-    if (that.state.referralcode.length !== 0) {
-      if (that.state.level !== 0) {
-        if (that.state.sendnum === 0) {
-          message.warning('请输入你要升级的金额')
-        } else {
-          that.setState({
-            upgradevisible: false
-          })
-          contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-            that.loading("loading", true, "", "")
-            service.getTransactionReceipt(hash).then((res) => {
-              that.loading("loading", false, "SUCCESSFULLY", successIcon)
-              setTimeout(function () {
-                that.gatdata();
-              }, 1500);
+    contract.isExist(that.state.account, that.state.referralcode).then((res) => {
+      if (res) {
+        if (that.state.level !== 0) {
+          if (that.state.sendnum === 0) {
+            message.warning(`${i18n.t("Upgradedamount")}`)
+          } else {
+            that.setState({
+              upgradevisible: false
             })
-          })
+            contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+              that.loading("loading", true, "", "")
+              service.getTransactionReceipt(hash).then((res) => {
+                that.loading("loading", false, `${i18n.t("success")}`, successIcon)
+                setTimeout(function () {
+                  that.gatdata();
+                }, 1500);
+              })
+            })
+          }
+        } else {
+          if (that.state.sendTxtnumber >= 300) {
+            that.setState({
+              upgradevisible: false
+            })
+
+
+            contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+              that.loading("loading", true, "", "")
+              service.getTransactionReceipt(hash).then((res) => {
+                that.loading("loading", false, `${i18n.t("success")}`, successIcon)
+                setTimeout(function () {
+                  that.gatdata();
+                }, 1500);
+              })
+            })
+
+
+
+          } else {
+
+            // message.error('首次创建需要输入大于等于300SUSD');
+            message.error(`${i18n.t("Upgradedamount")}` + '300SUSD');
+          }
         }
       } else {
-        if (that.state.sendTxtnumber >= 300) {
-          that.setState({
-            upgradevisible: false
-          })
-          contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-            that.loading("loading", true, "", "")
-            service.getTransactionReceipt(hash).then((res) => {
-              that.loading("loading", false, "SUCCESSFULLY", successIcon)
-              setTimeout(function () {
-                that.gatdata();
-              }, 1500);
-            })
-          })
-        } else {
-          message.error('首次创建需要输入大于等于300SUSD');
-        }
+        message.error(`${i18n.t("fillinthecorrectreferralcode")}`)
       }
-    } else {
-      message.error('请填写推荐码');
-    }
+    })
+
+
+
+
+
   }
 
   selectName(mainPkr: any, name: any) {
@@ -464,6 +485,7 @@ class Miner extends React.Component<any, Miners> {
       mainpkr: userobj.MainPKr,
       account: userobj,
       serobalance: new BigNumber(userobj.Balance.get("SERO")).dividedBy(10 ** 18).toFixed(2),
+      susdbalance: new BigNumber(userobj.Balance.get("SUSD_T")).dividedBy(10 ** 18).toFixed(2)
     })
   }
 
@@ -507,8 +529,8 @@ class Miner extends React.Component<any, Miners> {
   }
   render() {
     const miner = this.state;
-    const allnum = miner.allNodeNum * 1;
-    const directnum = miner.directNodeNum * 1;
+    const allnum = miner.allNodeNum;
+    const directnum = miner.directNodeNum;
     return (
       <div className="miner">
         <div className="bg">
@@ -545,6 +567,9 @@ class Miner extends React.Component<any, Miners> {
                 </div>
                 <div className="usermoney">
                   <p>{miner.serobalance === 'NaN' ? 0 : miner.serobalance} SERO</p>
+                </div>
+                <div className="usermoney">
+                  <p>{miner.susdbalance === 'NaN' ? 0 : miner.susdbalance} SUSD</p>
                 </div>
               </div>
               <div className="userbtn">
@@ -630,8 +655,8 @@ class Miner extends React.Component<any, Miners> {
                   >
                     <div className="upgradeboxcontent">
                       <div className="head">
-                        <div className="img">
-                          <img src={grouphead} alt="" />
+                        <div className="headertitle">
+                          <h2>升级会员</h2>
                         </div>
                       </div>
                       <div className="listbox">
@@ -690,9 +715,11 @@ class Miner extends React.Component<any, Miners> {
                             </Select>
                             <InputNumber min={0} placeholder={i18n.t("Entertheamount")} onChange={(e) => this.sendnum(e)} />
                           </div>
-                          <div>
-                            <p>{miner.sendTxt}</p>
-                          </div>
+                          {
+                            miner.sendcy === "SUSD_T" ? <div></div> : <div>
+                              <p>{miner.sendTxt}</p>
+                            </div>
+                          }
                         </div>
                         <div className="listitem">
                           {
@@ -701,8 +728,10 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                       </div>
                       <div className="footer">
-                        <div className="img" onClick={() => this.levelbtn()}>
-                          <img src={groupbtn} alt="" />
+                        <div className="footerbtn" onClick={() => this.levelbtn()}>
+                          {
+                            miner.myid === "" ? <p>{i18n.t("Joinmember")}</p> : <p>{i18n.t("Joinmember")}</p>
+                          }
                         </div>
                       </div>
                     </div>
@@ -710,6 +739,21 @@ class Miner extends React.Component<any, Miners> {
                 </div>
               </div>
               <div className="bottom">
+              <div className="rowbox">
+                  <div className="leftbox">
+                    <div className="left">
+                      <p>{i18n.t("Totalperformance")}(SUSD)</p>
+                    </div>
+                    <div className="right">
+                      <p></p>
+                    </div>
+                  </div>
+                  <div className="rightbox">
+                    <div className="right">
+                      <p>{miner.achievement}  SUSD</p>
+                    </div>
+                  </div>
+                </div>         
 
                 <div className="rowbox">
                   <div className="leftbox">
@@ -721,12 +765,8 @@ class Miner extends React.Component<any, Miners> {
                     </div>
                   </div>
                   <div className="rightbox">
-                    <div className="left">
-                      <p>
-                      </p>
-                    </div>
                     <div className="right">
-                      <p>{miner.returnnowday}</p>
+                      <p>{miner.returnnowday}  SUSD</p>
                     </div>
                   </div>
                 </div>
@@ -742,13 +782,8 @@ class Miner extends React.Component<any, Miners> {
                     </div>
                   </div>
                   <div className="rightbox">
-                    <div className="left">
-                      <p>
-                        奖励：
-                      </p>
-                    </div>
                     <div className="right">
-                      <p>{miner.recommendProfit}</p>
+                      <p>{miner.recommendProfit}  SUSD</p>
                     </div>
                   </div>
                 </div>
@@ -764,13 +799,9 @@ class Miner extends React.Component<any, Miners> {
                     </div>
                   </div>
                   <div className="rightbox">
-                    <div className="left">
-                      <p>
-                        奖励：
-                      </p>
-                    </div>
+                   
                     <div className="right">
-                      <p>{miner.nodeProfit}</p>
+                      <p>{miner.nodeProfit}  SUSD</p>
                     </div>
                   </div>
                 </div>
@@ -790,20 +821,15 @@ class Miner extends React.Component<any, Miners> {
                             }
                           </span>
                         }
-                        </p>
+                      </p>
                     </div>
                     <div className="right">
                       <p></p>
                     </div>
                   </div>
                   <div className="rightbox">
-                    <div className="left">
-                      <p>
-                        {i18n.t("Managerewards")}：
-                      </p>
-                    </div>
                     <div className="right">
-                      <p>{miner.communityProfit}</p>
+                      <p>{miner.communityProfit}  SUSD</p>
                     </div>
                   </div>
                 </div>
@@ -818,15 +844,11 @@ class Miner extends React.Component<any, Miners> {
                     </div>
                   </div>
                   <div className="rightbox">
-                    <div className="left">
-                      <p>
-                      </p>
-                    </div>
                     <div className="right">
                       <Button onClick={() => this.openwithdraw()}>{i18n.t("withdraw")}</Button>
                       <Modal
                         className="withdrawbox"
-                        title="提币"
+                        title={i18n.t("currency")}
                         visible={this.state.withdrawvisible}
                         onCancel={() => this.closewithdraw()}
                         centered={true}
@@ -851,7 +873,7 @@ class Miner extends React.Component<any, Miners> {
 
                           <div className="footer">
                             <div className="footerbtn" >
-                              <img src={footerbtn} onClick={() => this.withdraw()} alt="" />
+                              <Button type="primary" onClick={() => this.withdraw()}>{i18n.t("withdrawmoney")}</Button>
                             </div>
                           </div>
                         </div>
