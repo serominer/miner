@@ -151,7 +151,7 @@ class Miner extends React.Component<any, Miners> {
           return item.Name === sessionStorage.getItem("userName");
         })
       }
-      console.log("user", userobj);
+      // console.log("user", userobj);
       let strmainpk: string = userobj.MainPKr;
       let length = strmainpk.length;
       let startmainpkr = strmainpk.substring(0, 5);
@@ -176,7 +176,7 @@ class Miner extends React.Component<any, Miners> {
   getdetail = (mainpkr: string) => {
     const that = this;
     contract.details(mainpkr).then((res) => {
-      console.log(res[0], res[1], res[2]);
+      // console.log(res[0], res[1], res[2]);
       that.level(fromValue(res[2].amount, 18).toNumber());
       let recommendProfit = 0;
       let nodeProfit = 0;
@@ -206,28 +206,6 @@ class Miner extends React.Component<any, Miners> {
   }
 
 
-  // getdetail = (mainpkr: string) => {
-  //   const that = this;
-  //   contract.details(mainpkr).then((res) => {
-  //     console.log(res[0], res[1], res[2]);
-  //     that.level(fromValue(res[2].amount, 18).toNumber());
-  //     console.log("getdetail>>>>>>>>>>>>>>>>>>>>>>", res)
-  //     that.setState({
-  //       myid: res[0],
-  //       recommendid: res[1],
-  //       referralcode: res[1],
-  //       allNodeNum: parseFloat(fromValue(res[2].allNodeNum, 18).toNumber().toFixed(2)),
-  //       returnAmount: parseFloat(fromValue(res[2].returnAmount, 18).toNumber().toFixed(2)),
-  //       canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
-  //       returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
-  //       amount: parseFloat(fromValue(res[2].amount, 18).toNumber().toFixed(2)),
-  //       lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m'),
-  //       recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2)),
-  //       nodeProfit: parseFloat(fromValue(res[2].nodeProfit, 18).toNumber().toFixed(2)),
-  //       communityProfit: parseFloat(fromValue(res[2].communityProfit, 18).toNumber().toFixed(2))
-  //     })
-  //   })
-  // }
 
 
 
@@ -382,13 +360,14 @@ class Miner extends React.Component<any, Miners> {
   sendnum(e: any) {
     const that = this;
     that.setState({
-      sendTxtnumber: 0,
+      sendTxtnumber:0,
       sendTxt: "",
       sendnum: e,
     })
     contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
+      // console.log("seednum>>>>>>",res)
       if (res !== "") {
-        let num = parseFloat(fromValue(res, 18).toNumber().toFixed(2));
+        let num = parseFloat(fromValue(res[0], 18).toNumber().toFixed(2));
         that.setState({
           sendTxtnumber: num,
           sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
@@ -427,12 +406,11 @@ class Miner extends React.Component<any, Miners> {
             })
           }
         } else {
+          // console.log("that.state.sendTxtnumber>>>>>>",that.state.sendTxtnumber)
           if (that.state.sendTxtnumber >= 300) {
             that.setState({
               upgradevisible: false
             })
-
-
             contract.invest(that.state.account, that.state.referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
               that.loading("loading", true, "", "")
               service.getTransactionReceipt(hash).then((res) => {
@@ -442,12 +420,7 @@ class Miner extends React.Component<any, Miners> {
                 }, 1500);
               })
             })
-
-
-
           } else {
-
-            // message.error('首次创建需要输入大于等于300SUSD');
             message.error(`${i18n.t("Upgradedamount")}` + '300SUSD');
           }
         }
