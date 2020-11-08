@@ -168,6 +168,14 @@ class Miner extends React.Component<any, Miners> {
     contract.details(mainpkr).then((res) => {
       console.log(res[0], res[1], res[2]);
       that.level(fromValue(res[2].amount, 18).toNumber());
+      let recommendProfit = 0;
+      let nodeProfit = 0;
+      let communityProfit = 0;
+      if (Math.floor(res[2].dynamicTimestamp / 600) == Math.floor(new Date().getTime() / 1000 / 600)) {
+        recommendProfit = parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2));
+        nodeProfit = parseFloat(fromValue(res[2].nodeProfit, 18).toNumber().toFixed(2));
+        communityProfit = parseFloat(fromValue(res[2].communityProfit, 18).toNumber().toFixed(2));
+      }
       that.setState({
         myid: res[0],
         recommendid: res[1],
@@ -178,9 +186,9 @@ class Miner extends React.Component<any, Miners> {
         returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
         amount: parseFloat(fromValue(res[2].amount, 18).toNumber().toFixed(2)),
         lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m'),
-        recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2)),
-        nodeProfit: parseFloat(fromValue(res[2].nodeProfit, 18).toNumber().toFixed(2)),
-        communityProfit: parseFloat(fromValue(res[2].communityProfit, 18).toNumber().toFixed(2))
+        recommendProfit: recommendProfit,
+        nodeProfit: nodeProfit,
+        communityProfit: communityProfit
       })
     })
   }
