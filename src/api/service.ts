@@ -1,6 +1,6 @@
 import * as config from './config';
 import axios from 'axios';
-// import i18n from '../i18n';
+import i18n from '../i18n';
 const seropp = require("sero-pp");
 
 class Service {
@@ -97,13 +97,12 @@ class Service {
     setLanguage() {
         seropp.getInfo(function (info: any) {
             localStorage.setItem("language", info.language);
-            // i18n.changeLanguage(info.language).catch((e:any)=>{
-            // });
+            i18n.changeLanguage(info.language).catch((e:any)=>{
+            });
         })
     }
 }
 
 const service = new Service();
-
 
 export default service;

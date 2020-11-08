@@ -4,7 +4,8 @@ import { InputNumber, message, Spin, Alert, Button, Modal, Input, Select, List }
 import service from '../../api/service';
 import contract from '../../api/contract';
 import BigNumber from 'bignumber.js'
-import { LoadingOutlined, CloseCircleOutlined, CheckCircleOutlined, CopyOutlined } from '@ant-design/icons';
+import i18n from '../../i18n'
+import { LoadingOutlined, CheckCircleOutlined, CopyOutlined } from '@ant-design/icons';
 import copy from 'copy-to-clipboard'
 
 import logo from '../../images/logo.png';
@@ -24,7 +25,8 @@ import body_bg from '../../images/body_bg.jpg';
 import foot_bg from '../../images/foot_bg.jpg';
 
 const { Option } = Select;
-const errIcon = <CloseCircleOutlined style={{ fontSize: 24 }} />
+
+// const errIcon = <CloseCircleOutlined style={{ fontSize: 24 }} />
 const successIcon = <CheckCircleOutlined style={{ fontSize: 24 }} />
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 interface Miners {
@@ -40,6 +42,7 @@ interface Miners {
   myid: string,
   amount: number,
   allNodeNum: number,
+  directNodeNum: number,
   recommendid: number,
   sendnum: number
   sendcy: string
@@ -76,6 +79,7 @@ class Miner extends React.Component<any, Miners> {
     recommendid: 0,
     amount: 0,
     allNodeNum: 0,
+    directNodeNum: 0,
     sendnum: 0,
     sendcy: "SUSD_T",
     returnAmount: 0,
@@ -163,6 +167,7 @@ class Miner extends React.Component<any, Miners> {
     })
   }
 
+
   getdetail = (mainpkr: string) => {
     const that = this;
     contract.details(mainpkr).then((res) => {
@@ -181,6 +186,7 @@ class Miner extends React.Component<any, Miners> {
         recommendid: res[1],
         referralcode: res[1],
         allNodeNum: parseFloat(fromValue(res[2].allNodeNum, 18).toNumber().toFixed(2)),
+        directNodeNum: parseFloat(fromValue(res[2].directNodeNum, 18).toNumber().toFixed(2)),
         returnAmount: parseFloat(fromValue(res[2].returnAmount, 18).toNumber().toFixed(2)),
         canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
         returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
@@ -192,6 +198,32 @@ class Miner extends React.Component<any, Miners> {
       })
     })
   }
+
+
+  // getdetail = (mainpkr: string) => {
+  //   const that = this;
+  //   contract.details(mainpkr).then((res) => {
+  //     console.log(res[0], res[1], res[2]);
+  //     that.level(fromValue(res[2].amount, 18).toNumber());
+  //     console.log("getdetail>>>>>>>>>>>>>>>>>>>>>>", res)
+  //     that.setState({
+  //       myid: res[0],
+  //       recommendid: res[1],
+  //       referralcode: res[1],
+  //       allNodeNum: parseFloat(fromValue(res[2].allNodeNum, 18).toNumber().toFixed(2)),
+  //       returnAmount: parseFloat(fromValue(res[2].returnAmount, 18).toNumber().toFixed(2)),
+  //       canWithdrawAmount: parseFloat(fromValue(res[2].canWithdrawAmount, 18).toNumber().toFixed(2)),
+  //       returnnowday: parseFloat(fromValue(res[2].amount, 18).multipliedBy(0.003).toNumber().toFixed(2)),
+  //       amount: parseFloat(fromValue(res[2].amount, 18).toNumber().toFixed(2)),
+  //       lastreturntime: that.formatTime(res[2][9] * 1000, 'M/D h:m'),
+  //       recommendProfit: parseFloat(fromValue(res[2].recommendProfit, 18).toNumber().toFixed(2)),
+  //       nodeProfit: parseFloat(fromValue(res[2].nodeProfit, 18).toNumber().toFixed(2)),
+  //       communityProfit: parseFloat(fromValue(res[2].communityProfit, 18).toNumber().toFixed(2))
+  //     })
+  //   })
+  // }
+
+
 
   level = (v: number) => {
     const that = this;
@@ -305,7 +337,7 @@ class Miner extends React.Component<any, Miners> {
   }
 
   referralcodeChange(e: any) {
-    console.log(e.target.value)
+    // console.log(e.target.value)
     const that = this;
     that.setState({
       referralcode: e.target.value
@@ -401,7 +433,7 @@ class Miner extends React.Component<any, Miners> {
             })
           })
         } else {
-          message.error('首次创建需要输入大于等于300的SUSD');
+          message.error('首次创建需要输入大于等于300SUSD');
         }
       }
     } else {
@@ -475,6 +507,8 @@ class Miner extends React.Component<any, Miners> {
   }
   render() {
     const miner = this.state;
+    const allnum = miner.allNodeNum * 1;
+    const directnum = miner.directNodeNum * 1;
     return (
       <div className="miner">
         <div className="bg">
@@ -515,17 +549,18 @@ class Miner extends React.Component<any, Miners> {
               </div>
               <div className="userbtn">
                 <div className="switchbtn">
-                  <Button onClick={() => this.openuser()}>切换</Button>
+                  <Button onClick={() => this.openuser()}>
+                    {i18n.t("Switch")}
+                  </Button>
                 </div>
                 <Modal
                   className="userboxs"
-                  title="切换用户"
+                  title={i18n.t("Switchuser")}
                   visible={this.state.uservisible}
                   onCancel={() => this.closeuser()}
                   footer={null}
                   centered={true}
                 >
-
                   <List
                     size="small"
                     className="userlistbox"
@@ -537,7 +572,6 @@ class Miner extends React.Component<any, Miners> {
                       >
                         <List.Item.Meta
                           description={`${item.Name}     ${item.MainPKr.substring(0, 5)}.....${item.MainPKr.substring(item.MainPKr.length - 5, item.MainPKr.length)}`}
-
                         />
                       </List.Item>
                     )}
@@ -551,7 +585,9 @@ class Miner extends React.Component<any, Miners> {
               <div className="top">
                 <div className="left">
                   <div className="level">
-                    <p>会员级别</p>
+                    <p>
+                      {i18n.t("Membershiplevel")}
+                    </p>
                   </div>
                   <div className="levelimg">
                     {
@@ -561,18 +597,28 @@ class Miner extends React.Component<any, Miners> {
                   </div>
                   <div className="leveltitle">
                     {
-                      miner.level === 0 ? <div><p>普通</p></div> : <div>{miner.level === 1 ? <div><p>白银</p></div> : <div>{miner.level === 2 ? <p>黄金</p> : <div>{miner.level === 3 ? <p>白金</p> : <div>{miner.level === 4 ? <p>钻石</p> : <div><p>皇冠</p></div>}</div>}</div>}</div>}</div>
+                      miner.level === 0 ? <div><p>{i18n.t("ordinary")}</p></div> : <div>{miner.level === 1 ? <div><p>{i18n.t("silver")}</p></div> : <div>{miner.level === 2 ? <p>{i18n.t("gold")}</p> : <div>{miner.level === 3 ? <p>{i18n.t("platinum")}</p> : <div>{miner.level === 4 ? <p>{i18n.t("diamond")}</p> : <div><p>{i18n.t("Crown")}</p></div>}</div>}</div>}</div>}</div>
                     }
                   </div>
                 </div>
                 <div className="right">
                   <div className="left">
-                    <div> <p>预计总收益：{miner.amount * miner.levelnum}</p></div>
-                    <div><p>已收益：{miner.returnAmount}</p></div>
+                    <div>
+                      <p>
+                        {i18n.t("Estimatedtotalrevenue")}
+                      ：{miner.amount * miner.levelnum}
+                      </p>
+                    </div>
+                    <div>
+                      <p>
+                        {i18n.t("Earned")}
+                      ：{miner.returnAmount}
+                      </p>
+                    </div>
                   </div>
                   <div className="right">
                     {
-                      miner.level === 0 ? <Button onClick={() => this.openupgrade()}>加入会员</Button> : <Button onClick={() => this.openupgrade()}>升级</Button>
+                      miner.level === 0 ? <Button onClick={() => this.openupgrade()}>{i18n.t("Joinmember")}</Button> : <Button onClick={() => this.openupgrade()}>{i18n.t("upgrade")}</Button>
                     }
                   </div>
                   <Modal
@@ -595,7 +641,7 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                           <div className="levelinfo">
                             <img src={level1} alt="" />
-                            <p>白银会员</p>
+                            <p>{i18n.t("Silvermember")}</p>
                           </div>
                         </div>
                         <div className={miner.levelborder[2].name}>
@@ -603,8 +649,8 @@ class Miner extends React.Component<any, Miners> {
                             <p>800 SUSD-1999 SUSD</p>
                           </div>
                           <div className="levelinfo">
-                            <img src={level1} alt="" />
-                            <p>黄金会员</p>
+                            <img src={level2} alt="" />
+                            <p>{i18n.t("Goldmember")}</p>
                           </div>
                         </div>
                         <div className={miner.levelborder[3].name}>
@@ -613,7 +659,7 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                           <div className="levelinfo">
                             <img src={level3} alt="" />
-                            <p>白金会员</p>
+                            <p>{i18n.t("PlatinumMember")}</p>
                           </div>
                         </div>
                         <div className={miner.levelborder[4].name}>
@@ -622,7 +668,7 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                           <div className="levelinfo">
                             <img src={level4} alt="" />
-                            <p>钻石会员</p>
+                            <p>{i18n.t("Diamondmembership")}</p>
                           </div>
                         </div>
 
@@ -632,7 +678,7 @@ class Miner extends React.Component<any, Miners> {
                           </div>
                           <div className="levelinfo">
                             <img src={level5} alt="" />
-                            <p>皇冠</p>
+                            <p>{i18n.t("Crown")}</p>
                           </div>
                         </div>
 
@@ -642,7 +688,7 @@ class Miner extends React.Component<any, Miners> {
                               <Option value="SUSD_T">SUSD_T</Option>
                               <Option value="SERO">SERO</Option>
                             </Select>
-                            <InputNumber min={0} placeholder="输入金额" onChange={(e) => this.sendnum(e)} />
+                            <InputNumber min={0} placeholder={i18n.t("Entertheamount")} onChange={(e) => this.sendnum(e)} />
                           </div>
                           <div>
                             <p>{miner.sendTxt}</p>
@@ -650,11 +696,8 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                         <div className="listitem">
                           {
-                            miner.level === 0 ? <Input placeholder="请填写推荐码" onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
-                            // placeholder={miner.recommendid}
+                            miner.level === 0 ? <Input placeholder={i18n.t("Pleasefillinthereferralcode")} onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
                           }
-
-
                         </div>
                       </div>
                       <div className="footer">
@@ -671,7 +714,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日固定返还(SUSD)</p>
+                      <p>{i18n.t("Fixeddayreturn")}(SUSD)</p>
                     </div>
                     <div className="right">
                       <p></p>
@@ -691,7 +734,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日推荐奖励</p>
+                      <p>{i18n.t("Referralrewardsoftheday")}</p>
 
                     </div>
                     <div className="right">
@@ -713,7 +756,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日节点</p>
+                      <p>{i18n.t("Nodeoftheday")}</p>
 
                     </div>
                     <div className="right">
@@ -735,11 +778,20 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>当日社区(
+                      <p>{i18n.t("Communityoftheday")}
                         {
-                          <span>v2</span>
+
+                          allnum > 6 && directnum > 3 ? <span>(v3)</span> : <span>
+                            {
+                              allnum > 4 && directnum > 2 ? <span>(v2)</span> : <span>
+                                {
+                                  allnum > 4 && directnum > 2 ? <span>(v1)</span> : <span></span>
+                                }
+                              </span>
+                            }
+                          </span>
                         }
-                        )</p>
+                        </p>
                     </div>
                     <div className="right">
                       <p></p>
@@ -748,7 +800,7 @@ class Miner extends React.Component<any, Miners> {
                   <div className="rightbox">
                     <div className="left">
                       <p>
-                        管理奖励：
+                        {i18n.t("Managerewards")}：
                       </p>
                     </div>
                     <div className="right">
@@ -760,7 +812,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>总共可提现(SUSD)</p>
+                      <p>{i18n.t("Totalwithdrawal")}(SUSD)</p>
                     </div>
                     <div className="right">
                       <p>{miner.canWithdrawAmount}</p>
@@ -772,7 +824,7 @@ class Miner extends React.Component<any, Miners> {
                       </p>
                     </div>
                     <div className="right">
-                      <Button onClick={() => this.openwithdraw()}>提现</Button>
+                      <Button onClick={() => this.openwithdraw()}>{i18n.t("withdraw")}</Button>
                       <Modal
                         className="withdrawbox"
                         title="提币"
@@ -782,7 +834,7 @@ class Miner extends React.Component<any, Miners> {
                         footer={null}
                       >
                         <div className="withdrawboxcontent">
-                          <div><p>提币数量</p></div>
+                          <div><p>{i18n.t("Numberofwithdrawals")}</p></div>
                           <div className="contentitem">
                             <div className="left">
                               <Select defaultValue="SUSD_T" style={{ width: 100 }} onChange={(e) => this.withdrawChange(e)}>
@@ -791,7 +843,10 @@ class Miner extends React.Component<any, Miners> {
                               </Select>
                             </div>
                             <div className="right">
-                              <p>可兑换额度：{miner.withdrawChangenum} {miner.withdrawcy}</p>
+                              <p>
+                                {i18n.t("Convertiblequota")}
+                                ：{miner.withdrawChangenum} {miner.withdrawcy}
+                              </p>
                             </div>
                           </div>
 
@@ -811,8 +866,7 @@ class Miner extends React.Component<any, Miners> {
 
           <div className="contractbox">
             <div className="contractcontent">
-              {/* <p>合约当天总返还数： 300000 SUSD_T     (等值SERO)</p> */}
-              <p>合约地址:</p>
+              <p>{i18n.t("Contractaddress")}:</p>
               <p>{contract.contract.address}</p>
             </div>
           </div>
@@ -822,22 +876,27 @@ class Miner extends React.Component<any, Miners> {
               <div className="head">
                 <img src={myinfo} alt="" />
                 <div>
-                  <p>我的合约信息</p>
+                  <p>{i18n.t("Mycontractinformation")}</p>
                 </div>
               </div>
               <div>
 
-                <p>ID:{miner.myid}
+                <p>
+                  {i18n.t("Myrecommendation")}ID
+                  :{miner.myid}
                   {
                     miner.myid === "" ? <div></div> : <CopyOutlined onClick={() => this.copytext()} style={{ fontSize: 14 }} />
                   }
                 </p>
               </div>
               <div>
-                <p>推荐伙伴ID：{miner.recommendid}</p>
+                <p>{i18n.t("Recommendedpartner")}ID：{miner.recommendid}</p>
               </div>
               <div>
-                <p>最近结算时间：{miner.lastreturntime} </p>
+                <p>
+                  {i18n.t("Lastsettlementtime")}
+                ：{miner.lastreturntime}
+                </p>
               </div>
             </div>
           </div>
@@ -867,11 +926,11 @@ function fromValue(v: number | string | undefined, d: number): BigNumber {
 }
 
 
-function toValue(v: number | string | undefined, d: number): BigNumber {
-  if (v) {
-    return new BigNumber(v).multipliedBy(10 ** d)
-  } else {
-    return new BigNumber(0)
-  }
-}
+// function toValue(v: number | string | undefined, d: number): BigNumber {
+//   if (v) {
+//     return new BigNumber(v).multipliedBy(10 ** d)
+//   } else {
+//     return new BigNumber(0)
+//   }
+// }
 export default Miner;
