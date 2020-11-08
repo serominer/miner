@@ -35,6 +35,7 @@ class Contract {
     }
 
     async invest(account: any, arg: any, cy: string, value: string) {
+    
         const res = await this.execute("invest", [arg], account, cy, value);
         return res;
     }
@@ -88,6 +89,7 @@ class Contract {
 
 
     async execute(method: string, args: Array<any>, account: any, cy?: string, value?: string): Promise<any> {
+        console.log("execute", method, args, cy, value)
         const packData: any = this.contract.packData(method, args, true)
         return new Promise((resolve, reject) => {
             const params: Params = {
