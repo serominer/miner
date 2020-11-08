@@ -337,7 +337,7 @@ class Miner extends React.Component<any, Miners> {
   }
 
   referralcodeChange(e: any) {
-    // console.log(e.target.value)
+    console.log(e.target.value)
     const that = this;
     that.setState({
       referralcode: e.target.value
@@ -696,7 +696,7 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                         <div className="listitem">
                           {
-                            miner.level === 0 ? <Input placeholder={i18n.t("Pleasefillinthereferralcode")} onChange={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
+                            miner.level === 0 ? <Input placeholder={i18n.t("Pleasefillinthereferralcode")} onBlur={(e) => this.referralcodeChange(e)} /> : <Input disabled={true} value={miner.recommendid} />
                           }
                         </div>
                       </div>
@@ -780,12 +780,11 @@ class Miner extends React.Component<any, Miners> {
                     <div className="left">
                       <p>{i18n.t("Communityoftheday")}
                         {
-
-                          allnum > 6 && directnum > 3 ? <span>(v3)</span> : <span>
+                          allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
                             {
-                              allnum > 4 && directnum > 2 ? <span>(v2)</span> : <span>
+                              allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
                                 {
-                                  allnum > 4 && directnum > 2 ? <span>(v1)</span> : <span></span>
+                                  allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
                                 }
                               </span>
                             }
