@@ -209,7 +209,7 @@ class Miner extends React.Component<any, Miners> {
 
   level = (v: number) => {
     const that = this;
-    if (v >= 300 && v < 800) {
+    if (v >= 100 && v < 800) {
       that.setState({
         level: 1,
         levelnum: 3
@@ -353,6 +353,7 @@ class Miner extends React.Component<any, Miners> {
   }
 
   sendnum(e: any) {
+
     const that = this;
     that.setState({
       sendTxtnumber: 0,
@@ -362,11 +363,25 @@ class Miner extends React.Component<any, Miners> {
     contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
       if (res !== "") {
         let num = parseFloat(fromValue(res[0], 18).toNumber().toFixed(2));
+        console.log("num>>>>>>>>>>>", num)
         that.setState({
           sendTxtnumber: num,
           sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
         })
+        // if (num === 0) {
+        //   that.setState({
+        //     sendTxtnumber: num,
+        //     sendTxt: "最低投资额300susd"
+        //   })
+        // } else {
+        //   that.setState({
+        //     sendTxtnumber: num,
+        //     sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
+        //   })
+        // }
+
       } else {
+
       }
     })
   }
@@ -381,9 +396,9 @@ class Miner extends React.Component<any, Miners> {
   levelbtn() {
     const that = this;
 
-    
+
     let referralcode = that.state.referralcode;
-    let sendnum=this.sendnumInput.current?.state.value;
+    let sendnum = this.sendnumInput.current?.state.value;
     if (that.state.level === 0) {
       referralcode = this.codeInput.current?.state.value;
     }
@@ -411,7 +426,7 @@ class Miner extends React.Component<any, Miners> {
               })
             }
           } else {
-            if (that.state.sendTxtnumber >= 300) {
+            if (that.state.sendTxtnumber >= 100) {
               that.setState({
                 upgradevisible: false
               })
@@ -425,7 +440,7 @@ class Miner extends React.Component<any, Miners> {
                 })
               })
             } else {
-              message.error(`${i18n.t("Upgradedamount")}` + '300SUSD');
+              message.error(`${i18n.t("Upgradedamount")}` + '100SUSD');
             }
           }
         } else {
@@ -637,7 +652,7 @@ class Miner extends React.Component<any, Miners> {
                       <div className="listbox">
                         <div className={miner.levelborder[1].name}>
                           <div className="detailinfo">
-                            <p>300 SUSD-799 SUSD</p>
+                            <p>100 SUSD-799 SUSD</p>
                           </div>
                           <div className="levelinfo">
                             <img src={level1} alt="" />
