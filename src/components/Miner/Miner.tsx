@@ -65,6 +65,7 @@ interface Miners {
 
 class Miner extends React.Component<any, Miners> {
   codeInput = React.createRef<Input>();
+  sendnumInput = React.createRef<Input>();
   state: Miners = {
     data: [],
     withdrawvisible: false,
@@ -149,7 +150,6 @@ class Miner extends React.Component<any, Miners> {
           return item.Name === sessionStorage.getItem("userName");
         })
       }
-      // console.log("user", userobj);
       let strmainpk: string = userobj.MainPKr;
       let length = strmainpk.length;
       let startmainpkr = strmainpk.substring(0, 5);
@@ -380,24 +380,27 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-    let referralcode = that.state.referralcode;
 
+    
+    let referralcode = that.state.referralcode;
+    let sendnum=this.sendnumInput.current?.state.value;
     if (that.state.level === 0) {
       referralcode = this.codeInput.current?.state.value;
     }
+
     if (referralcode === undefined) {
       message.error(`${i18n.t("fillinthereferralcode")}`)
     } else {
       contract.isExist(that.state.account, referralcode).then((res) => {
         if (res) {
           if (that.state.level !== 0) {
-            if (that.state.sendnum === 0) {
+            if (sendnum === 0) {
               message.warning(`${i18n.t("Upgradedamount")}`)
             } else {
               that.setState({
                 upgradevisible: false
               })
-              contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+              contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
                 that.loading("loading", true, "", "")
                 service.getTransactionReceipt(hash).then((res) => {
                   that.loading("loading", false, `${i18n.t("success")}`, successIcon)
@@ -412,7 +415,7 @@ class Miner extends React.Component<any, Miners> {
               that.setState({
                 upgradevisible: false
               })
-              contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+              contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
                 that.loading("loading", true, "", "")
                 service.getTransactionReceipt(hash).then((res) => {
                   that.loading("loading", false, `${i18n.t("success")}`, successIcon)
@@ -685,7 +688,7 @@ class Miner extends React.Component<any, Miners> {
                               <Option value="SUSD_T">SUSD_T</Option>
                               <Option value="SERO">SERO</Option>
                             </Select>
-                            <InputNumber min={0} placeholder={i18n.t("Entertheamount")} onChange={(e) => this.sendnum(e)} />
+                            <InputNumber min={0} placeholder={i18n.t("Entertheamount")} ref={this.sendnumInput} onChange={(e) => this.sendnum(e)} />
                           </div>
                           {
                             miner.sendcy === "SUSD_T" ? <div></div> : <div>
