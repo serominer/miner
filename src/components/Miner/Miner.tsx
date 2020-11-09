@@ -12,9 +12,6 @@ import logo from '../../images/logo.png';
 import head from '../../images/head.png';
 import user from '../../images/user.png';
 import myinfo from '../../images/myinfo.png';
-import grouphead from '../../images/grouphead.png';
-import groupbtn from '../../images/groupbtn.png';
-import footerbtn from '../../images/footerbtn.png';
 import level1 from '../../images/level1.png';
 import level2 from '../../images/level2.png';
 import level3 from '../../images/level3.png';
@@ -317,18 +314,15 @@ class Miner extends React.Component<any, Miners> {
           that.gatdata();
         }, 1500);
       })
-
     })
   }
 
   referralcodeChange(e: any) {
     const that = this;
-    console.log("e.target.value>>>>>>>>>>>>>>>",e.target.value, this.codeInput.current?.state.value);
+    // console.log("e.target.value>>>>>>>>>>>>>>>",e.target.value, this.codeInput.current?.state.value);
     that.setState({
       referralcode: e.target.value
     })
-
-
   }
 
   closeupgrade() {
@@ -340,7 +334,7 @@ class Miner extends React.Component<any, Miners> {
 
   openupgrade() {
     const that = this;
-    console.log(that.state.referralcode,">>>>>>>>>>>>>>>>>>")
+    // console.log(that.state.referralcode,">>>>>>>>>>>>>>>>>>")
     that.setState({
       upgradevisible: true,
       referralcode:""
@@ -369,7 +363,6 @@ class Miner extends React.Component<any, Miners> {
       sendnum: e,
     })
     contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
-      // console.log("seednum>>>>>>",res)
       if (res !== "") {
         let num = parseFloat(fromValue(res[0], 18).toNumber().toFixed(2));
         that.setState({
@@ -400,7 +393,6 @@ class Miner extends React.Component<any, Miners> {
             that.setState({
               upgradevisible: false
             })
-      
             contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
               that.loading("loading", true, "", "")
               service.getTransactionReceipt(hash).then((res) => {
@@ -412,7 +404,6 @@ class Miner extends React.Component<any, Miners> {
             })
           }
         } else {
-          // console.log("that.state.sendTxtnumber>>>>>>",that.state.sendTxtnumber)
           if (that.state.sendTxtnumber >= 300) {
             that.setState({
               upgradevisible: false
@@ -434,11 +425,6 @@ class Miner extends React.Component<any, Miners> {
         message.error(`${i18n.t("fillinthecorrectreferralcode")}`)
       }
     })
-
-
-
-
-
   }
 
   selectName(mainPkr: any, name: any) {
@@ -480,11 +466,11 @@ class Miner extends React.Component<any, Miners> {
     })
   }
 
-
   formatNumber(n: any) {
     n = n.toString()
     return n[1] ? n : '0' + n;
   }
+
   formatTime(number: number, format: any) {
     let time = new Date(number)
     let newArr = []
@@ -636,7 +622,7 @@ class Miner extends React.Component<any, Miners> {
                     <div className="upgradeboxcontent">
                       <div className="head">
                         <div className="headertitle">
-                          <h2>升级会员</h2>
+                          <h2>{i18n.t("upgrademember")}</h2>
                         </div>
                       </div>
                       <div className="listbox">
@@ -722,7 +708,7 @@ class Miner extends React.Component<any, Miners> {
               <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>{i18n.t("Totalperformance")}(SUSD)</p>
+                      <p>{i18n.t("Totalperformance")} :</p>
                     </div>
                     <div className="right">
                       <p></p>
@@ -738,7 +724,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>{i18n.t("Fixeddayreturn")}(SUSD)</p>
+                      <p>{i18n.t("Fixeddayreturn")} :</p>
                     </div>
                     <div className="right">
                       <p></p>
@@ -754,8 +740,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>{i18n.t("Referralrewardsoftheday")}</p>
-
+                      <p>{i18n.t("Referralrewardsoftheday")} :</p>
                     </div>
                     <div className="right">
                       <p></p>
@@ -771,7 +756,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>{i18n.t("Nodeoftheday")}</p>
+                      <p>{i18n.t("Nodeoftheday")} :</p>
 
                     </div>
                     <div className="right">
@@ -789,7 +774,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>{i18n.t("Communityoftheday")}
+                      <p>{i18n.t("Communityoftheday")} :
                         {
                           allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
                             {
@@ -817,7 +802,7 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                      <p>{i18n.t("Totalwithdrawal")}(SUSD)</p>
+                      <p>{i18n.t("Totalwithdrawal")} :</p>
                     </div>
                     <div className="right">
                       <p>{miner.canWithdrawAmount}</p>
@@ -881,7 +866,6 @@ class Miner extends React.Component<any, Miners> {
                 </div>
               </div>
               <div>
-
                 <p>
                   {i18n.t("Myrecommendation")}ID
                   :{miner.myid}

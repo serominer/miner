@@ -29,12 +29,18 @@
   "Convertiblequota":"可兑换额度",
   "Contractaddress":"合约地址",
   "Mycontractinformation":"我的合约信息",
-  "Recommendedpartner":"推荐伙伴",
+  "Recommendedpartner":"推荐人的",
   "Myrecommendation":"我的推荐",
   "Lastsettlementtime":"最近结算时间",
   "Convertible":"可兑换",
   "Upgradedamount":"请输入你要升级的金额",
   "Firstcreated":"首次创建需要输入大于等于",
   "fillinthereferralcode":"请填写推荐码",
-  "fillinthecorrectreferralcode":"请填写正确的推荐码"
+  "fillinthecorrectreferralcode":"请填写正确的推荐码",
+  "success":"成功",
+  "currency":"提币",
+  "withdrawmoney":"我要提币",
+  "upgrades":"我要升级",
+  "upgrademember":"升级会员",
+  "Totalperformance":"总业绩"
 }
