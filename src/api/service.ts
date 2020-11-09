@@ -71,7 +71,7 @@ class Service {
             github: "https://github.com/serominer/miner",
             author: "Sero Miner",
             url: window.location.origin + window.location.pathname,
-            logo: window.location.origin + window.location.pathname + "logo.png",
+            logo: window.location.origin + window.location.pathname + "dapplogo.png",
             barColor: "#00107e",
             navColor: "#00107e",
             barMode: "dark",

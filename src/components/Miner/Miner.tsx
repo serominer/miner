@@ -79,7 +79,7 @@ class Miner extends React.Component<any, Miners> {
     myid: "0",
     recommendid: 0,
     amount: 0,
-    achievement:0,
+    achievement: 0,
     allNodeNum: 0,
     directNodeNum: 0,
     sendnum: 0,
@@ -319,7 +319,6 @@ class Miner extends React.Component<any, Miners> {
 
   referralcodeChange(e: any) {
     const that = this;
-    // console.log("e.target.value>>>>>>>>>>>>>>>",e.target.value, this.codeInput.current?.state.value);
     that.setState({
       referralcode: e.target.value
     })
@@ -334,10 +333,8 @@ class Miner extends React.Component<any, Miners> {
 
   openupgrade() {
     const that = this;
-    // console.log(that.state.referralcode,">>>>>>>>>>>>>>>>>>")
     that.setState({
       upgradevisible: true,
-      referralcode:""
     })
   }
 
@@ -358,7 +355,7 @@ class Miner extends React.Component<any, Miners> {
   sendnum(e: any) {
     const that = this;
     that.setState({
-      sendTxtnumber:0,
+      sendTxtnumber: 0,
       sendTxt: "",
       sendnum: e,
     })
@@ -383,48 +380,57 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-    let referralcode = this.codeInput.current?.state.value;
-    contract.isExist(that.state.account, referralcode).then((res) => {
-      if (res) {
-        if (that.state.level !== 0) {
-          if (that.state.sendnum === 0) {
-            message.warning(`${i18n.t("Upgradedamount")}`)
-          } else {
-            that.setState({
-              upgradevisible: false
-            })
-            contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-              that.loading("loading", true, "", "")
-              service.getTransactionReceipt(hash).then((res) => {
-                that.loading("loading", false, `${i18n.t("success")}`, successIcon)
-                setTimeout(function () {
-                  that.gatdata();
-                }, 1500);
+    let referralcode = that.state.referralcode;
+
+    if (that.state.level === 0) {
+      referralcode = this.codeInput.current?.state.value;
+    }
+    if (referralcode === undefined) {
+      message.error(`${i18n.t("fillinthereferralcode")}`)
+    } else {
+      contract.isExist(that.state.account, referralcode).then((res) => {
+        if (res) {
+          if (that.state.level !== 0) {
+            if (that.state.sendnum === 0) {
+              message.warning(`${i18n.t("Upgradedamount")}`)
+            } else {
+              that.setState({
+                upgradevisible: false
               })
-            })
+              contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+                that.loading("loading", true, "", "")
+                service.getTransactionReceipt(hash).then((res) => {
+                  that.loading("loading", false, `${i18n.t("success")}`, successIcon)
+                  setTimeout(function () {
+                    that.gatdata();
+                  }, 1500);
+                })
+              })
+            }
+          } else {
+            if (that.state.sendTxtnumber >= 300) {
+              that.setState({
+                upgradevisible: false
+              })
+              contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
+                that.loading("loading", true, "", "")
+                service.getTransactionReceipt(hash).then((res) => {
+                  that.loading("loading", false, `${i18n.t("success")}`, successIcon)
+                  setTimeout(function () {
+                    that.gatdata();
+                  }, 1500);
+                })
+              })
+            } else {
+              message.error(`${i18n.t("Upgradedamount")}` + '300SUSD');
+            }
           }
         } else {
-          if (that.state.sendTxtnumber >= 300) {
-            that.setState({
-              upgradevisible: false
-            })
-            contract.invest(that.state.account, referralcode, that.state.sendcy, "0x" + new BigNumber(that.state.sendnum).multipliedBy(10 ** 18).toString(16)).then((hash) => {
-              that.loading("loading", true, "", "")
-              service.getTransactionReceipt(hash).then((res) => {
-                that.loading("loading", false, `${i18n.t("success")}`, successIcon)
-                setTimeout(function () {
-                  that.gatdata();
-                }, 1500);
-              })
-            })
-          } else {
-            message.error(`${i18n.t("Upgradedamount")}` + '300SUSD');
-          }
+          message.error(`${i18n.t("fillinthecorrectreferralcode")}`)
         }
-      } else {
-        message.error(`${i18n.t("fillinthecorrectreferralcode")}`)
-      }
-    })
+      })
+    }
+
   }
 
   selectName(mainPkr: any, name: any) {
@@ -689,7 +695,7 @@ class Miner extends React.Component<any, Miners> {
                         </div>
                         <div className="listitem">
                           {
-                            miner.level === 0 ? <Input placeholder={i18n.t("Pleasefillinthereferralcode")}  ref = {this.codeInput} /> : <Input disabled={true} value={miner.recommendid} />
+                            miner.level === 0 ? <Input placeholder={i18n.t("Pleasefillinthereferralcode")} ref={this.codeInput} /> : <Input disabled={true} value={miner.recommendid} />
                           }
                         </div>
                       </div>
@@ -705,7 +711,7 @@ class Miner extends React.Component<any, Miners> {
                 </div>
               </div>
               <div className="bottom">
-              <div className="rowbox">
+                <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
                       <p>{i18n.t("Totalperformance")} :</p>
@@ -719,7 +725,7 @@ class Miner extends React.Component<any, Miners> {
                       <p>{miner.achievement}  SUSD</p>
                     </div>
                   </div>
-                </div>         
+                </div>
 
                 <div className="rowbox">
                   <div className="leftbox">
@@ -764,7 +770,7 @@ class Miner extends React.Component<any, Miners> {
                     </div>
                   </div>
                   <div className="rightbox">
-                   
+
                     <div className="right">
                       <p>{miner.nodeProfit}  SUSD</p>
                     </div>
