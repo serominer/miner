@@ -23,7 +23,6 @@ import foot_bg from '../../images/foot_bg.jpg';
 
 const { Option } = Select;
 
-// const errIcon = <CloseCircleOutlined style={{ fontSize: 24 }} />
 const successIcon = <CheckCircleOutlined style={{ fontSize: 24 }} />
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 interface Miners {
@@ -174,7 +173,6 @@ class Miner extends React.Component<any, Miners> {
   getdetail = (mainpkr: string) => {
     const that = this;
     contract.details(mainpkr).then((res) => {
-      // console.log(res[0], res[1], res[2]);
       that.level(fromValue(res[2].amount, 18).toNumber());
       let recommendProfit = 0;
       let nodeProfit = 0;
@@ -202,10 +200,6 @@ class Miner extends React.Component<any, Miners> {
       })
     })
   }
-
-
-
-
 
   level = (v: number) => {
     const that = this;
@@ -368,17 +362,6 @@ class Miner extends React.Component<any, Miners> {
           sendTxtnumber: num,
           sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
         })
-        // if (num === 0) {
-        //   that.setState({
-        //     sendTxtnumber: num,
-        //     sendTxt: "最低投资额300susd"
-        //   })
-        // } else {
-        //   that.setState({
-        //     sendTxtnumber: num,
-        //     sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
-        //   })
-        // }
 
       } else {
 
@@ -395,8 +378,6 @@ class Miner extends React.Component<any, Miners> {
 
   levelbtn() {
     const that = this;
-
-
     let referralcode = that.state.referralcode;
     let sendnum = this.sendnumInput.current?.state.value;
     if (that.state.level === 0) {
@@ -448,7 +429,6 @@ class Miner extends React.Component<any, Miners> {
         }
       })
     }
-
   }
 
   selectName(mainPkr: any, name: any) {
@@ -459,9 +439,7 @@ class Miner extends React.Component<any, Miners> {
     })
 
     let userName = name;
-
     sessionStorage.setItem("userName", userName);
-
     let strmainpk: string = userobj.MainPKr;
     let length = strmainpk.length;
     let startmainpkr = strmainpk.substring(0, 5);
@@ -518,10 +496,8 @@ class Miner extends React.Component<any, Miners> {
   }
   render() {
     const miner = this.state;
-    const allnum = miner.allNodeNum*300;
+    const allnum = miner.allNodeNum;
     const directnum = miner.directNodeNum;
-
-
     return (
       <div className="miner">
         <div className="bg">
@@ -799,14 +775,14 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
-                    
+
                       <p>{i18n.t("Communityoftheday")} :
                         {
-                          allnum >= miner.achievement && directnum >= 3 ? <span>(v3)</span> : <span>
+                          allnum * 300 >= miner.achievement && allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
                             {
-                              allnum >= miner.achievement && directnum >= 2 ? <span>(v2)</span> : <span>
+                              allnum * 300 >= miner.achievement && allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
                                 {
-                                  allnum >= miner.achievement && directnum >= 1 ? <span>(v1)</span> : <span></span>
+                                  allnum * 300 >= miner.achievement && allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
                                 }
                               </span>
                             }
@@ -935,7 +911,6 @@ function fromValue(v: number | string | undefined, d: number): BigNumber {
     return new BigNumber(0)
   }
 }
-
 
 // function toValue(v: number | string | undefined, d: number): BigNumber {
 //   if (v) {
