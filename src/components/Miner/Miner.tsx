@@ -173,6 +173,7 @@ class Miner extends React.Component<any, Miners> {
   getdetail = (mainpkr: string) => {
     const that = this;
     contract.details(mainpkr).then((res) => {
+      console.log("res[2]>>>>>>>>>>>>>>>>>>>>>>>",res[2])
       that.level(fromValue(res[2].amount, 18).toNumber());
       let recommendProfit = 0;
       let nodeProfit = 0;
@@ -778,11 +779,11 @@ class Miner extends React.Component<any, Miners> {
 
                       <p>{i18n.t("Communityoftheday")} :
                         {
-                          miner.achievement >= allnum * 100 && allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
+                          miner.achievement >= 6 * 300 && allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
                             {
-                              miner.achievement >= allnum * 100 && allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
+                              miner.achievement >= 4 * 300 && allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
                                 {
-                                  miner.achievement >= allnum * 100 && allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
+                                  miner.achievement >= 2 * 300 && allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
                                 }
                               </span>
                             }
