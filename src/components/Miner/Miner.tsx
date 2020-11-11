@@ -778,11 +778,11 @@ class Miner extends React.Component<any, Miners> {
 
                       <p>{i18n.t("Communityoftheday")} :
                         {
-                          allnum * 300 >= miner.achievement && allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
+                          miner.achievement >= allnum * 100 && allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
                             {
-                              allnum * 300 >= miner.achievement && allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
+                              miner.achievement >= allnum * 100 && allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
                                 {
-                                  allnum * 300 >= miner.achievement && allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
+                                  miner.achievement >= allnum * 100 && allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
                                 }
                               </span>
                             }
