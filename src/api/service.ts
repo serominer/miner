@@ -63,7 +63,6 @@ class Service {
             })
         })
     }
-
     async initDApp() {
         const dapp = {
             name: "Sero Miner",

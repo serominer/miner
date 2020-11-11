@@ -518,8 +518,9 @@ class Miner extends React.Component<any, Miners> {
   }
   render() {
     const miner = this.state;
-    const allnum = miner.allNodeNum;
+    const allnum = miner.allNodeNum*300;
     const directnum = miner.directNodeNum;
+
 
     return (
       <div className="miner">
@@ -798,13 +799,14 @@ class Miner extends React.Component<any, Miners> {
                 <div className="rowbox">
                   <div className="leftbox">
                     <div className="left">
+                    
                       <p>{i18n.t("Communityoftheday")} :
                         {
-                          allnum >= 6 && directnum >= 3 ? <span>(v3)</span> : <span>
+                          allnum >= miner.achievement && directnum >= 3 ? <span>(v3)</span> : <span>
                             {
-                              allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
+                              allnum >= miner.achievement && directnum >= 2 ? <span>(v2)</span> : <span>
                                 {
-                                  allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
+                                  allnum >= miner.achievement && directnum >= 1 ? <span>(v1)</span> : <span></span>
                                 }
                               </span>
                             }
