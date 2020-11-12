@@ -819,7 +819,9 @@ class Miner extends React.Component<any, Miners> {
                   </div>
                   <div className="rightbox">
                     <div className="right">
-                      <Button onClick={() => this.openwithdraw()}>{i18n.t("withdraw")}</Button>
+                      {
+                        miner.canWithdrawAmount === 0 ? <Button className="nowithdrawbtn">{i18n.t("withdraw")}</Button> : <Button onClick={() => this.openwithdraw()}>{i18n.t("withdraw")}</Button>
+                      }
                       <Modal
                         className="withdrawbox"
                         title={i18n.t("currency")}
