@@ -46,7 +46,7 @@ class Contract {
     }
 
     async isExist(account: any, code: string) {
-        const res = await this.call("invest", [code], account.MainPKr, "SUSD_T", "0x" + new BigNumber(3e24).toString(16));
+        const res = await this.call("invest", [code], account.MainPKr, "SUSD", "0x" + new BigNumber(3e20).toString(16));
         if (res == "0x") {
             return false;
         }

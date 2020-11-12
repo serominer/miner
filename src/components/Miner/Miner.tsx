@@ -172,7 +172,6 @@ class Miner extends React.Component<any, Miners> {
   getdetail = (mainpkr: string) => {
     const that = this;
     contract.details(mainpkr).then((res) => {
-      // console.log("res[2]>>>>>>>>>>>>>>>>>>>>>>>", res[2])
       that.level(fromValue(res[2].amount, 18).toNumber());
       let recommendProfit = 0;
       let nodeProfit = 0;
