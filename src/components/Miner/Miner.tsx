@@ -83,7 +83,7 @@ class Miner extends React.Component<any, Miners> {
     allNodeNum: 0,
     directNodeNum: 0,
     sendnum: 0,
-    sendcy: "SUSD_T",
+    sendcy: "SUSD",
     returnAmount: 0,
     canWithdrawAmount: 0,
     returnnowday: 0,
@@ -94,7 +94,7 @@ class Miner extends React.Component<any, Miners> {
     levelnum: 0,
     lastreturntime: "",
     referralcode: "",
-    withdrawcy: "SUSD_T",
+    withdrawcy: "SUSD",
     loading: {
       loadingbox: "loadingbox",
       status: false,
@@ -162,18 +162,17 @@ class Miner extends React.Component<any, Miners> {
         mainpkr: userobj.MainPKr,
         account: userobj,
         serobalance: new BigNumber(userobj.Balance.get("SERO")).dividedBy(10 ** 18).toFixed(2),
-        susdbalance: new BigNumber(userobj.Balance.get("SUSD_T")).dividedBy(10 ** 18).toFixed(2),
+        susdbalance: new BigNumber(userobj.Balance.get("SUSD")).dividedBy(10 ** 18).toFixed(2),
       })
       that.getdetail(userobj.MainPKr);
       that.loading("loadingbox", false, "", null);
     })
   }
 
-
   getdetail = (mainpkr: string) => {
     const that = this;
     contract.details(mainpkr).then((res) => {
-      console.log("res[2]>>>>>>>>>>>>>>>>>>>>>>>", res[2])
+      // console.log("res[2]>>>>>>>>>>>>>>>>>>>>>>>", res[2])
       that.level(fromValue(res[2].amount, 18).toNumber());
       let recommendProfit = 0;
       let nodeProfit = 0;
@@ -270,7 +269,6 @@ class Miner extends React.Component<any, Miners> {
     })
   }
 
-
   closewithdraw() {
     const that = this;
     that.setState({
@@ -280,9 +278,12 @@ class Miner extends React.Component<any, Miners> {
 
   openwithdraw() {
     const that = this;
-    that.setState({
-      withdrawvisible: true,
-      withdrawChangenum: that.state.canWithdrawAmount
+
+    contract.canwithdrawCall(that.state.account, that.state.withdrawcy).then((res) => {
+      that.setState({
+        withdrawvisible: true,
+        withdrawChangenum: parseFloat(fromValue(res[0], 18).toNumber().toFixed(2))
+      })
     })
   }
 
@@ -348,7 +349,6 @@ class Miner extends React.Component<any, Miners> {
   }
 
   sendnum(e: any) {
-
     const that = this;
     that.setState({
       sendTxtnumber: 0,
@@ -358,7 +358,6 @@ class Miner extends React.Component<any, Miners> {
     contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
       if (res !== "") {
         let num = parseFloat(fromValue(res[0], 18).toNumber().toFixed(2));
-        console.log("num>>>>>>>>>>>", num)
         that.setState({
           sendTxtnumber: num,
           sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
@@ -453,7 +452,7 @@ class Miner extends React.Component<any, Miners> {
       mainpkr: userobj.MainPKr,
       account: userobj,
       serobalance: new BigNumber(userobj.Balance.get("SERO")).dividedBy(10 ** 18).toFixed(2),
-      susdbalance: new BigNumber(userobj.Balance.get("SUSD_T")).dividedBy(10 ** 18).toFixed(2)
+      susdbalance: new BigNumber(userobj.Balance.get("SUSD")).dividedBy(10 ** 18).toFixed(2)
     })
   }
 
@@ -677,14 +676,14 @@ class Miner extends React.Component<any, Miners> {
 
                         <div className="listitem">
                           <div className="box">
-                            <Select defaultValue="SUSD_T" style={{ width: 100 }} onChange={(e) => this.sendChange(e)}>
-                              <Option value="SUSD_T">SUSD_T</Option>
+                            <Select defaultValue="SUSD" style={{ width: 100 }} onChange={(e) => this.sendChange(e)}>
+                              <Option value="SUSD">SUSD</Option>
                               <Option value="SERO">SERO</Option>
                             </Select>
                             <InputNumber min={0} placeholder={i18n.t("Entertheamount")} ref={this.sendnumInput} onChange={(e) => this.sendnum(e)} />
                           </div>
                           {
-                            miner.sendcy === "SUSD_T" ? <div></div> : <div>
+                            miner.sendcy === "SUSD" ? <div></div> : <div>
                               <p>{miner.sendTxt}</p>
                             </div>
                           }
@@ -734,7 +733,8 @@ class Miner extends React.Component<any, Miners> {
                   </div>
                   <div className="rightbox">
                     <div className="right">
-                      <p>{miner.returnnowday}  SUSD</p>
+                      <p>
+                        {miner.returnAmount>=miner.amount * miner.levelnum?0 :<span> {miner.returnnowday}</span>} SUSD</p>
                     </div>
                   </div>
                 </div>
@@ -759,14 +759,12 @@ class Miner extends React.Component<any, Miners> {
                   <div className="leftbox">
                     <div className="left">
                       <p>{i18n.t("Nodeoftheday")} :</p>
-
                     </div>
                     <div className="right">
                       <p></p>
                     </div>
                   </div>
                   <div className="rightbox">
-
                     <div className="right">
                       <p>{miner.nodeProfit}  SUSD</p>
                     </div>
@@ -779,15 +777,15 @@ class Miner extends React.Component<any, Miners> {
 
                       <p>{i18n.t("Communityoftheday")} :
                         {
-                          miner.achievement >= 6 * 300 && allnum >= 6 && directnum >= 3 ? <span>
+                          miner.achievement >= 500 * 300 && allnum >= 500 && directnum >= 30 ? <span>
                             {
-                              miner.achievement >= 290000 ? <span>vip</span> : <span>v3</span>
+                              miner.achievement >= 2900000 ? <span>(vip)</span> : <span>(v3)</span>
                             }
                           </span> : <span>
                               {
-                                miner.achievement >= 4 * 300 && allnum >= 4 && directnum >= 2 ? <span>(v2)</span> : <span>
+                                miner.achievement >= 300 * 300 && allnum >= 300 && directnum >= 20 ? <span>(v2)</span> : <span>
                                   {
-                                    miner.achievement >= 2 * 300 && allnum >= 2 && directnum >= 1 ? <span>(v1)</span> : <span></span>
+                                    miner.achievement >= 100 * 300 && allnum >= 100 && directnum >= 10 ? <span>(v1)</span> : <span></span>
                                   }
                                 </span>
                               }
@@ -830,8 +828,8 @@ class Miner extends React.Component<any, Miners> {
                           <div><p>{i18n.t("Numberofwithdrawals")}</p></div>
                           <div className="contentitem">
                             <div className="left">
-                              <Select defaultValue="SUSD_T" style={{ width: 100 }} onChange={(e) => this.withdrawChange(e)}>
-                                <Option value="SUSD_T">SUSD_T</Option>
+                              <Select defaultValue="SUSD" style={{ width: 100 }} onChange={(e) => this.withdrawChange(e)}>
+                                <Option value="SUSD">SUSD</Option>
                                 <Option value="SERO">SERO</Option>
                               </Select>
                             </div>
@@ -907,7 +905,6 @@ class Miner extends React.Component<any, Miners> {
     )
   }
 }
-
 
 function fromValue(v: number | string | undefined, d: number): BigNumber {
   if (v) {
