@@ -355,18 +355,22 @@ class Miner extends React.Component<any, Miners> {
       sendTxt: "",
       sendnum: e,
     })
-    contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
-      if (res !== "") {
-        let num = parseFloat(fromValue(res[0], 18).toNumber().toFixed(2));
-        that.setState({
-          sendTxtnumber: num,
-          sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
-        })
+    if (e >= 0) {
+      contract.investCall(that.state.account, "hAYBo5yIHmP", that.state.sendcy, "0x" + new BigNumber(e).multipliedBy(10 ** 18).toString(16)).then((res) => {
+        if (res !== "") {
+          let num = parseFloat(fromValue(res[0], 18).toNumber().toFixed(2));
+          that.setState({
+            sendTxtnumber: num,
+            sendTxt: `${i18n.t("Convertible")}` + num + "SUSD"
+          })
 
-      } else {
+        } else {
 
-      }
-    })
+        }
+      })
+    } else {
+
+    }
   }
   sendChange(value: any) {
     const that = this;
@@ -697,7 +701,7 @@ class Miner extends React.Component<any, Miners> {
                       <div className="footer">
                         <div className="footerbtn" onClick={() => this.levelbtn()}>
                           {
-                            miner.myid === "" ? <p>{i18n.t("Joinmember")}</p> : <p>{i18n.t("Joinmember")}</p>
+                            miner.myid === "" ? <p>{i18n.t("Joinmember")}</p> : <p>{i18n.t("upgrade")}</p>
                           }
                         </div>
                       </div>
@@ -734,7 +738,7 @@ class Miner extends React.Component<any, Miners> {
                   <div className="rightbox">
                     <div className="right">
                       <p>
-                        {miner.returnAmount>=miner.amount * miner.levelnum?0 :<span> {miner.returnnowday}</span>} SUSD</p>
+                        {miner.returnAmount >= miner.amount * miner.levelnum ? 0 : <span> {miner.returnnowday}</span>} SUSD</p>
                     </div>
                   </div>
                 </div>

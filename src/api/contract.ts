@@ -51,7 +51,6 @@ class Contract {
             return false;
         }
         return true;
-
     }
 
     async call(method: string, args: Array<any>, from: string, cy?: string, value?: string): Promise<any> {
@@ -87,9 +86,7 @@ class Contract {
         })
     }
 
-
     async execute(method: string, args: Array<any>, account: any, cy?: string, value?: string): Promise<any> {
-        console.log("execute", method, args, cy, value)
         const packData: any = this.contract.packData(method, args, true)
         return new Promise((resolve, reject) => {
             const params: Params = {
