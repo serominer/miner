@@ -21,7 +21,14 @@ class Contract {
     }
 
     async details(mainPKr: string) {
-        const res = await this.call("details", [], mainPKr)
+        const res = await this.call("details", [], mainPKr);
+        if(res[2].redeeming != 0) {
+            let id = await this.call("addrToId", [mainPKr], mainPKr);
+            if(id && id[0]) {
+                let investor = await this.call("investors", [id[0]], mainPKr);
+                res[2].returnAmount = investor.returnAmount
+            }
+        }
         return res;
     }
 
@@ -35,8 +42,18 @@ class Contract {
     }
 
     async invest(account: any, arg: any, cy: string, value: string) {
-    
+
         const res = await this.execute("invest", [arg], account, cy, value);
+        return res;
+    }
+
+    async redeem(account: any) {
+        const res = await this.execute("redeem", [], account, "DECE", "0x0");
+        return res;
+    }
+
+    async end(account: any) {
+        const res = await this.execute("end", [], account, "DECE", "0x0");
         return res;
     }
 
