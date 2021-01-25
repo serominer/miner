@@ -661,7 +661,7 @@ class Miner extends React.Component<any, Miners> {
                                                     }
                                                 </div>
                                             }
-                                            <div>
+                                            <div style={{paddingTop: '15px'}}>
                                                 {
                                                   canRedeem &&
                                                   <Button onClick={() => {

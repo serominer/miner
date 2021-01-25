@@ -143,7 +143,6 @@ p {
 .miner .content .listbox .listcontent .top .right .right {
   flex: 1;
   text-align: center;
-  padding: 10px 0px 10px 5px;
 }
 .miner .content .listbox .listcontent .top .right .right .ant-btn {
   background-color: #ff9600;

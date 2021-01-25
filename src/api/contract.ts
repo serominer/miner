@@ -77,7 +77,7 @@ class Contract {
             const params: Params = {
                 to: this.contract.address
             }
-            params.from = from
+            params.from = from;
             params.data = packData;
             if (cy) {
                 params.cy = cy;
